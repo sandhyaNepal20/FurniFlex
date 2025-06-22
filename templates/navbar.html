@@ -1,0 +1,52 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <script defer src="{% static 'script.js' %}"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- <script defer src="static/script.js"></script> -->
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
+            </a>
+        </div>
+
+        <div class="hamburger" id="hamburger">&#9776;</div>
+
+        <nav id="nav-menu" class="nav-menu">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#products" class="nav-link">Products</a>
+            <a href="#about" class="nav-link">About Us</a>
+            <a href="#contact" class="nav-link">Contact Us</a>
+            <!-- Move login and cart here for mobile -->
+            <a href="#" class="login-btn mobile-only">Login / Sign Up</a>
+            <a href="{% url 'cart' %}" class="cart-icon mobile-only">🛒 Cart</a>
+        </nav>
+
+        <div class="auth-cart desktop-only">
+            <a href="{% url 'signup' %}" class="login-btn">Login / Sign Up</a>
+            <span class="cart-icon">🛒</span>
+        </div>
+    </header>
+
+
+</body>
+
+</div>
+
+
+
+</html>

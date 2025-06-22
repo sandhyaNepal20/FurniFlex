@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/Signup.css' %}" />
+    <script defer src="{% static 'script.js' %}"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+
+    <!-- Login Form -->
+    <div class="signup-container">
+        <div class="form-box">
+            <div class="form-logo">
+                <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
+                <h2>Login</h2>
+            </div>
+            <p class="form-subtitle">Welcome back! Please login to your account.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="email" placeholder="Email" name="email" required />
+                <input type="password" placeholder="Password" name="password" required />
+
+                <div class="form-actions">
+                    <button type="submit">Log In</button>
+                    <a href="{% url 'password_reset' %}" class="forgot-password">Forget Password?</a>
+                </div>
+            </form>
+
+            <p class="login-link">Don’t have an account? <a href="{% url 'signup' %}">SignUp</a></p>
+        </div>
+    </div>
+
+    <div>
+        {% include 'footer.html' %}
+    </div>
+</body>
+
+</html>
