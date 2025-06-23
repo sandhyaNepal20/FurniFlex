@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 
 
 def home_view(request):
-    return render(request, 'home.html')
+    return render(request, 'account.html')
 
 
 def cart_view(request):
@@ -15,3 +15,5 @@ def password_reset_view(request):
     return render(request, 'password_reset.html') 
 def search_product_view(request):
     return render(request, 'searchproduct.html')
+def account_view(request):
+    return render(request, 'account.html')
