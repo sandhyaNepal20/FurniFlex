@@ -74,3 +74,18 @@ document.querySelectorAll('a.nav-link').forEach(link => {
         }
     });
 });
+
+const categoryBtn = document.getElementById('categoryBtn');
+const categoryMenu = document.getElementById('categoryMenu');
+
+categoryBtn.addEventListener('click', () => {
+    const isVisible = categoryMenu.style.display === 'block';
+    categoryMenu.style.display = isVisible ? 'none' : 'block';
+});
+
+// Optional: close dropdown when clicking outside
+document.addEventListener('click', (event) => {
+    if (!categoryBtn.contains(event.target) && !categoryMenu.contains(event.target)) {
+        categoryMenu.style.display = 'none';
+    }
+});

@@ -26,7 +26,9 @@
         </div>
         <div class="slide right">
             <img src="static/images/cover.jpeg" alt="Living Room" />
-            <button class="shop-btn">Shop Now →</button>
+            <a href="{% url 'searchproduct' %}">
+                <button class="shop-btn">Shop Now →</button>
+            </a>
         </div>
     </section>
 
@@ -164,8 +166,8 @@
 
 
 </body>
-
 {% include 'footer.html' %}
+
 
 
 </html>

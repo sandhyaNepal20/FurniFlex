@@ -636,7 +636,7 @@ nav a {
 .footer-top {
     display: flex;
     justify-content: space-between;
-    padding: 80px 60px;
+    padding: 180px 60px;
     max-width: 1200px;
     margin: 0 auto;
     gap: 40px;

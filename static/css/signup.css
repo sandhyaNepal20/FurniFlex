@@ -42,7 +42,11 @@ nav a {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 40px;
+    /* margin-top: 40px; */
+    margin-top: 0;
+    /* remove any margin pushing down */
+    position: relative;
+    top: -20px;
 
 }
 

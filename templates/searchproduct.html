@@ -1,0 +1,141 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/searchproduct.css' %}" />
+    <script defer src="{% static 'script.js' %}"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- <script defer src="static/script.js"></script> -->
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <!-- Search and Category Section -->
+    <section class="search-category-section">
+        <div class="search-container">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" placeholder="What are you looking for?" class="search-input" />
+            </div>
+
+            <!-- Search Button -->
+            <button class="search-button">Search</button>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="category-dropdown">
+            <button class="category-button" id="categoryBtn">
+                Select Categories
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            <ul class="category-menu" id="categoryMenu">
+                <li>Sofa</li>
+                <li>Beds</li>
+                <li>Chair</li>
+                <li>Table</li>
+                <li>Wardrobe</li>
+            </ul>
+        </div>
+        <script>
+            const categoryBtn = document.getElementById('categoryBtn');
+            const categoryMenu = document.getElementById('categoryMenu');
+
+            categoryBtn.addEventListener('click', () => {
+                const isVisible = categoryMenu.style.display === 'block';
+                categoryMenu.style.display = isVisible ? 'none' : 'block';
+            });
+
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                if (!categoryBtn.contains(event.target) && !categoryMenu.contains(event.target)) {
+                    categoryMenu.style.display = 'none';
+                }
+            });
+        </script>
+
+    </section>
+
+    <!-- Divider -->
+    <hr class="section-divider" />
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="products-header">
+            <h2>Products</h2>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
+                <h4>S-Series Comfort Chair</h4>
+                <p class="price">Rs.7375</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(50 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
+                <h4>BACKSALEN</h4>
+                <p class="price">Rs.65000</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(100 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/b.png' %}" alt="Bed" />
+                <h4>Bed</h4>
+                <p class="price">Rs.80360</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(500 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
+                <h4>Small BookShelf</h4>
+                <p class="price">Rs.18060</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(15 Reviews)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</body>
+{% include 'footer.html' %}
+
+
+
+</html>

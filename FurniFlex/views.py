@@ -12,4 +12,6 @@ def login_view(request):
 def signup_view(request):
     return render(request, 'signup.html')
 def password_reset_view(request):
-    return render(request, 'password_reset.html')  # make sure this template exists
+    return render(request, 'password_reset.html') 
+def search_product_view(request):
+    return render(request, 'searchproduct.html')

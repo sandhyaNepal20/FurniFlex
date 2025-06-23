@@ -27,6 +27,8 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
     path('reset-password/', views.password_reset_view, name='password_reset'),
+    path('searchproduct/', views.search_product_view, name='searchproduct'),
+
 
 
 

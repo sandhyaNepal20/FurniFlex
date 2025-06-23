@@ -20,8 +20,9 @@
         <div class="form-box">
             <div class="form-logo">
                 <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
-                <h2>Login</h2>
             </div>
+            <h2>Login</h2>
+
             <p class="form-subtitle">Welcome back! Please login to your account.</p>
             <form method="POST">
                 {% csrf_token %}
