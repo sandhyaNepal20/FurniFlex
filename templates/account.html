@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FurniFlex</title>
     <link rel="stylesheet" href="{% static 'css/account.css' %}" />
+
     <script defer src="{% static 'script.js' %}"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -39,7 +40,7 @@
 
         <!-- Left-Aligned Form and Edit Button -->
         <div class="form-wrapper">
-            <button class="edit-button">Edit</button>
+            <a href="{% url 'editprofile' %}" class="edit-button">Edit</a>
 
             <div class="form-details">
                 <div class="form-group">

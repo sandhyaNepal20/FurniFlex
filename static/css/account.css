@@ -121,3 +121,19 @@ input[readonly] {
     color: #000;
     padding-top: 5px;
 }
+
+.edit-button {
+    background-color: #e2a874;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.edit-button:hover {
+    background-color: #d28e64;
+}

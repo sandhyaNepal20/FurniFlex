@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Profile - FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/editprofile.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+
+    <section class="edit-profile-page">
+        <h2>Edit Your Profile</h2>
+
+        <form class="edit-form">
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" value="Sandhya Nepal" readonly />
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <p class="email-display">sandhyanepal54@gmail.com</p>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="text" id="phone" name="phone" value="9766467330" readonly />
+            </div>
+
+            <!-- Password Section -->
+            <div class="form-group">
+                <label>Password Changes</label>
+                <input type="password" placeholder="Current Password" />
+                <input type="password" placeholder="New Password" />
+                <input type="password" placeholder="Confirm New Password" />
+            </div>
+
+            <!-- Save Button -->
+            <button type="submit" class="save-button">Save Changes</button>
+        </form>
+    </section>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>
