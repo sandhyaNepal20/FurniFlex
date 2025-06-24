@@ -19,3 +19,5 @@ def account_view(request):
     return render(request, 'account.html')
 def edit_profile_view(request):
     return render(request, 'editprofile.html')
+def category_view(request):
+    return render(request, 'category.html')
