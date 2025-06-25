@@ -31,6 +31,10 @@ urlpatterns = [
         path('account/', views.account_view, name='account'),
             path('edit-profile/', views.edit_profile_view, name='editprofile'),
                 path('category/', views.category_view, name='category'),
+                    path('customize/', views.customize_view, name='customize'),
+                    path('cart/', views.cart_view, name='cart'),
+
+
 
 
 

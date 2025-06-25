@@ -7,8 +7,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FurniFlex</title>
-
-    <link rel="stylesheet" href="{% static 'css/searchproduct.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}" />
     <script defer src="{% static 'script.js' %}"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -18,104 +17,50 @@
 <body>
 
     {% include 'navbar.html' %}
-    <script>
+    <section class="cart-container">
+        <h2>Shopping Cart</h2>
+        <div class="cart-header">
+            <span>Product</span>
+            <span>Quantity</span>
+            <span>Price</span>
+            <span><img src="{% static 'images/delete.png' %}" alt="Delete All" class="delete-all-icon"></span>
+        </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            });
-        });
-
-        function smoothScroll(target, duration) {
-            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            let startTime = null;
-
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                // easing function for smoothness (easeInOutCubic)
-                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
-            }
-
-            // easeInOutCubic easing function
-            function easeInOutCubic(t, b, c, d) {
-                t /= d / 2;
-                if (t < 1) return c / 2 * t * t * t + b;
-                t -= 2;
-                return c / 2 * (t * t * t + 2) + b;
-            }
-
-            requestAnimationFrame(animation);
-        }
-
-        // Attach smooth scroll event to nav links with class 'nav-link'
-        document.querySelectorAll('a.nav-link').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetID = this.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetID);
-                if (targetSection) {
-                    smoothScroll(targetSection, 700); // 600ms duration for smooth scroll
-                }
-            });
-        });
-    </script>
-
-    <!-- Search and Category Section -->
-    <section class="search-category-section">
-        <div class="search-container">
-            <!-- Search Bar -->
-            <div class="search-bar">
-                <span class="search-icon">🔍</span>
-                <input type="text" placeholder="What are you looking for?" class="search-input" />
+        <!-- Cart Item 1 -->
+        <div class="cart-item">
+            <div class="product-info">
+                <img src="{% static 'images/sofa.png' %}" alt="Sofa">
+                <div>
+                    <h4>Sofa</h4>
+                    <p>2 seat comfortable one</p>
+                </div>
             </div>
-
-            <!-- Search Button -->
-            <button class="search-button">Search</button>
+            <div class="quantity">
+                <input type="number" value="1" min="1">
+            </div>
+            <div class="price">Rs 65000</div>
+            <div class="remove-icon">
+                <img src="{% static 'images/trash.png' %}" alt="Delete">
+            </div>
         </div>
 
-        <!-- Category Dropdown -->
-        <div class="category-dropdown">
-            <button class="category-button" id="categoryBtn">
-                Select Categories
-                <span class="dropdown-arrow">▼</span>
-            </button>
-            <ul class="category-menu" id="categoryMenu">
-                <li>Sofa</li>
-                <li>Beds</li>
-                <li>Chair</li>
-                <li>Table</li>
-                <li>Wardrobe</li>
-            </ul>
+        <!-- Cart Item 2 -->
+        <div class="cart-item">
+            <div class="product-info">
+                <img src="{% static 'images/chair.png' %}" alt="Chair">
+                <div>
+                    <h4>Chair</h4>
+                    <p>Comfortable</p>
+                </div>
+            </div>
+            <div class="quantity">
+                <input type="number" value="1" min="1">
+            </div>
+            <div class="price">Rs 10000</div>
+            <div class="remove-icon">
+                <img src="{% static 'images/trash.png' %}" alt="Delete">
+            </div>
         </div>
-        <script>
-            const categoryBtn = document.getElementById('categoryBtn');
-            const categoryMenu = document.getElementById('categoryMenu');
-
-            categoryBtn.addEventListener('click', () => {
-                const isVisible = categoryMenu.style.display === 'block';
-                categoryMenu.style.display = isVisible ? 'none' : 'block';
-            });
-
-            // Close dropdown if clicked outside
-            document.addEventListener('click', (event) => {
-                if (!categoryBtn.contains(event.target) && !categoryMenu.contains(event.target)) {
-                    categoryMenu.style.display = 'none';
-                }
-            });
-        </script>
-
     </section>
 
     <!-- Divider -->
@@ -123,7 +68,7 @@
     <!-- Products Section -->
     <section id="products" class="products-section">
         <div class="products-header">
-            <h2>Products</h2>
+            <h2>Best Sellers</h2>
         </div>
 
         <div class="product-grid">
@@ -245,7 +190,6 @@
             </form>
         </div>
     </section>
-
 
 
 </body>
