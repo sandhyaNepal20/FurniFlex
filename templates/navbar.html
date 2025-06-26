@@ -31,17 +31,84 @@
             <a href="#products" class="nav-link">Products</a>
             <a href="#about" class="nav-link">About Us</a>
             <a href="#contact" class="nav-link">Contact Us</a>
-            <!-- Move login and cart here for mobile -->
-            <a href="#" class="login-btn mobile-only">Login / Sign Up</a>
-            <a href="{% url 'cart' %}" class="cart-icon mobile-only">🛒 Cart</a>
+
+            {% if request.user.is_authenticated %}
+            <div class="dropdown mobile-only">
+                <button id="mobileAccountDropdownBtn" class="login-btn dropbtn">My Account ▾</button>
+                <div id="mobileAccountDropdownMenu" class="dropdown-content">
+                    <a href="{% url 'account' %}">Profile</a>
+                    <a href="{% url 'logout' %}">Logout <span class="logout-icon">↪️</span></a>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="mobile-only">Login / Sign Up</a>
+                {% endif %}
+
+                <a href="{% url 'cart' %}" class="cart-icon mobile-only">🛒 Cart</a>
         </nav>
 
+
         <div class="auth-cart desktop-only">
-            <a href="{% url 'signup' %}" class="login-btn">Login / Sign Up</a>
-            <span class="cart-icon">🛒</span>
+            {% if request.user.is_authenticated %}
+            <div class="dropdown">
+                <button id="accountDropdownBtn" class="login-btn dropbtn">My Account</button>
+                <div id="accountDropdownMenu" class="dropdown-content">
+                    <a href="{% url 'account' %}">Profile</a>
+                    <a href="{% url 'logout' %}">Logout <span class="logout-icon">↪️</span></a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'login' %}" class="login-btn">Login / Sign Up</a>
+            {% endif %}
+            <a href="{% url 'cart' %}" class="cart-icon">🛒</a>
         </div>
     </header>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hamburger menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
 
+            hamburger.addEventListener('click', function () {
+                navMenu.classList.toggle('show');
+            });
+
+            // Desktop dropdown toggle (existing)
+            const dropdownBtn = document.getElementById('accountDropdownBtn');
+            const dropdownMenu = document.getElementById('accountDropdownMenu');
+
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!dropdownMenu.contains(e.target) && !dropdownBtn.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+
+            // Mobile dropdown toggle inside hamburger
+            const mobileDropdownBtn = document.getElementById('mobileAccountDropdownBtn');
+            const mobileDropdownMenu = document.getElementById('mobileAccountDropdownMenu');
+
+            if (mobileDropdownBtn && mobileDropdownMenu) {
+                mobileDropdownBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    mobileDropdownMenu.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!mobileDropdownMenu.contains(e.target) && !mobileDropdownBtn.contains(e.target)) {
+                        mobileDropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+
+    </script>
 
 </body>
 

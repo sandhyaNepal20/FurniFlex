@@ -17,10 +17,13 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
+
 .cart-container h2 {
-    text-align: center;
+    text-align: left;
     margin-bottom: 30px;
+
 }
+
 
 .cart-header {
     display: grid;

@@ -19,6 +19,7 @@ from django.urls import path
 from . import views  # ✅ This line fixes the error
 
 from FurniFlex.views import home_view
+from .views import logout_view, home_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +34,8 @@ urlpatterns = [
                 path('category/', views.category_view, name='category'),
                     path('customize/', views.customize_view, name='customize'),
                     path('cart/', views.cart_view, name='cart'),
+                        path('logout/', logout_view, name='logout'),
+
 
 
 

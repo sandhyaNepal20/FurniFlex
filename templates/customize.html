@@ -17,7 +17,62 @@
 <body>
 
     {% include 'navbar.html' %}
+    <section class="product-detail">
+        <div class="container">
+            <!-- Left: Image -->
+            <div class="left">
+                <div class="main-image">
+                    <img src="{% static 'images/sofa.png' %}" alt="Main Sofa" />
+                </div>
+                <div class="thumbnails">
+                    <img src="{% static 'images/sofa_thumb1.png' %}" alt="Thumb 1" class="active" />
+                    <img src="{% static 'images/sofa_thumb2.png' %}" alt="Thumb 2" />
+                    <img src="{% static 'images/sofa_thumb3.png' %}" alt="Thumb 3" />
+                    <img src="{% static 'images/sofa_thumb4.png' %}" alt="Thumb 4" />
+                    <img src="{% static 'images/sofa_thumb5.png' %}" alt="Thumb 5" />
+                </div>
+            </div>
 
+            <!-- Right: Product Info -->
+            <div class="right">
+                <h1>BACKSALEN</h1>
+                <div class="stars">
+                    <span>★★★★☆</span>
+                    <span class="reviews">(150 Reviews)</span>
+                </div>
+                <div class="price">Rs 65000</div>
+                <p class="desc">2-seat sofa, Hallarp gray</p>
+
+                <div class="color-group">
+                    <label>Color</label>
+                    <div class="colors">
+                        <span class="color black"></span>
+                        <span class="color gray"></span>
+                        <span class="color cream"></span>
+                        <span class="arrow">›</span>
+                    </div>
+                </div>
+
+                <div class="quantity-group">
+                    <label>Quantity</label>
+                    <select>
+                        <option>01</option>
+                        <option>02</option>
+                        <option>03</option>
+                    </select>
+                </div>
+
+                <div class="actions">
+                    <button class="wishlist">♡</button>
+                    <button class="add-cart">Add To Cart</button>
+                </div>
+
+                <div class="buy-now-container">
+                    <button class="buy-now">Buy Now</button>
+                </div>
+
+            </div>
+    </section>
     <!-- Divider -->
     <hr class="section-divider" />
     <!-- Products Section -->

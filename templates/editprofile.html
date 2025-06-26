@@ -1,16 +1,21 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Edit Profile - FurniFlex</title>
+    <title>FurniFlex</title>
     <link rel="stylesheet" href="{% static 'css/editprofile.css' %}" />
+    <script defer src="{% static 'script.js' %}"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <!-- <script defer src="static/script.js"></script> -->
 </head>
 
 <body>
+
     {% include 'navbar.html' %}
 
     <section class="edit-profile-page">
@@ -20,7 +25,7 @@
             <!-- Full Name -->
             <div class="form-group">
                 <label for="fullname">Full Name</label>
-                <input type="text" id="fullname" name="fullname" value="Sandhya Nepal" readonly />
+                <input type="text" id="fullname" name="fullname" value="Sandhya Nepal" />
             </div>
 
             <!-- Email -->
@@ -32,7 +37,7 @@
             <!-- Phone Number -->
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" value="9766467330" readonly />
+                <input type="text" id="phone" name="phone" value="9766467330" />
             </div>
 
             <!-- Password Section -->
@@ -48,7 +53,138 @@
         </form>
     </section>
 
-    {% include 'footer.html' %}
+    <!-- Divider -->
+    <hr class="section-divider" />
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <div class="products-header">
+            <h2>Best Sellers</h2>
+        </div>
+
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
+                <h4>S-Series Comfort Chair</h4>
+                <p class="price">Rs.7375</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(50 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
+                <h4>BACKSALEN</h4>
+                <p class="price">Rs.65000</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(100 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/b.png' %}" alt="Bed" />
+                <h4>Bed</h4>
+                <p class="price">Rs.80360</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(500 Reviews)</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
+                <h4>Small BookShelf</h4>
+                <p class="price">Rs.18060</p>
+                <div class="rating" data-selected="0">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                    <span class="review-count">(15 Reviews)</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- About Us Section -->
+    <section id="about" class="about-section">
+        <h2>About Us</h2>
+        <div class="about-container">
+            <div class="about-image">
+                <img class="responsive-img" src="{% static 'images/cover.jpeg' %}" alt="Modern Living Room" />
+            </div>
+            <div class="about-content">
+                <h3>Affordable furniture for every home</h3>
+                <p>
+                    FurniFlex is a modern digital platform built to help you plan, visualize, and customize furniture
+                    that fits your lifestyle and space—without the pressure of online shopping. We’re not an e-commerce
+                    site. Instead, we focus entirely on empowering users to explore different furniture styles, sizes,
+                    materials, and color options in a creative and personalized way.
+                </p>
+                <p>
+                    Whether you're a homeowner trying to find the right sofa size for your living room, a student
+                    decorating a dorm, or an interior designer experimenting with ideas, FurniFlex is made for you.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <div class="contact-wrapper">
+            <!-- Contact Info Box -->
+            <div class="contact-info">
+                <div class="info-block">
+                    <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
+                    <div>
+                        <h4>Call To Us</h4>
+                        <p>We are available 24/7, 7 days a week.</p>
+                        <p>Phone: +977 9768467330</p>
+                    </div>
+                </div>
+                <hr />
+                <div class="info-block">
+                    <img class="responsive-img-small" src="{% static 'images/msg.png' %}" alt="Mail Icon" />
+                    <div>
+                        <h4>Write To Us</h4>
+                        <p>Fill out our form and we will contact you within 24 hours.</p>
+                        <p>Emails: customer@gmail.com</p>
+                        <p>Emails: furniflex@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <form class="contact-form">
+                <div class="form-row">
+                    <input type="text" placeholder="Your Name *" required />
+                    <input type="email" placeholder="Your Email *" required />
+                    <input type="tel" placeholder="Your Phone *" required />
+                </div>
+                <textarea placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+
 </body>
+{% include 'footer.html' %}
+
+
 
 </html>

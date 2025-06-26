@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FurniFlex</title>
     <link rel="stylesheet" href="{% static 'css/account.css' %}" />
-
     <script defer src="{% static 'script.js' %}"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -18,6 +17,7 @@
 <body>
 
     {% include 'navbar.html' %}
+
     <!-- Account Section -->
     <section class="account-page">
         <!-- Banner -->
@@ -61,19 +61,18 @@
         </div>
     </section>
 
-    <!-- Divider Line -->
-    <hr class="section-divider" />
 
+    <!-- Divider -->
+    <hr class="section-divider" />
     <!-- Products Section -->
     <section id="products" class="products-section">
         <div class="products-header">
-            <h2>Products</h2>
-            <button class="view-all-btn">View All</button>
+            <h2>Best Sellers</h2>
         </div>
 
         <div class="product-grid">
             <div class="product-card">
-                <img src="static/images/chair.png" alt="S-Series Comfort Chair" />
+                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
                 <h4>S-Series Comfort Chair</h4>
                 <p class="price">Rs.7375</p>
                 <div class="rating" data-selected="0">
@@ -87,7 +86,7 @@
             </div>
 
             <div class="product-card">
-                <img src="static/images/sofa.png" alt="BACKSALEN" />
+                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
                 <h4>BACKSALEN</h4>
                 <p class="price">Rs.65000</p>
                 <div class="rating" data-selected="0">
@@ -101,7 +100,7 @@
             </div>
 
             <div class="product-card">
-                <img src="static/images/b.png" alt="Bed" />
+                <img src="{% static 'images/b.png' %}" alt="Bed" />
                 <h4>Bed</h4>
                 <p class="price">Rs.80360</p>
                 <div class="rating" data-selected="0">
@@ -115,7 +114,7 @@
             </div>
 
             <div class="product-card">
-                <img src="static/images/w.png" alt="Small BookShelf" />
+                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
                 <h4>Small BookShelf</h4>
                 <p class="price">Rs.18060</p>
                 <div class="rating" data-selected="0">
@@ -129,13 +128,12 @@
             </div>
         </div>
     </section>
-
     <!-- About Us Section -->
     <section id="about" class="about-section">
         <h2>About Us</h2>
         <div class="about-container">
             <div class="about-image">
-                <img src="static/images/cover.jpeg" alt="Modern Living Room" />
+                <img class="responsive-img" src="{% static 'images/cover.jpeg' %}" alt="Modern Living Room" />
             </div>
             <div class="about-content">
                 <h3>Affordable furniture for every home</h3>
@@ -153,7 +151,6 @@
         </div>
     </section>
 
-
     <!-- Contact Us Section -->
     <section id="contact" class="contact-section">
         <h2>Contact Us</h2>
@@ -161,7 +158,7 @@
             <!-- Contact Info Box -->
             <div class="contact-info">
                 <div class="info-block">
-                    <img src="static/images/call.png" alt="Call Icon" />
+                    <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
                     <div>
                         <h4>Call To Us</h4>
                         <p>We are available 24/7, 7 days a week.</p>
@@ -170,7 +167,7 @@
                 </div>
                 <hr />
                 <div class="info-block">
-                    <img src="static/images/msg.png" alt="Mail Icon" />
+                    <img class="responsive-img-small" src="{% static 'images/msg.png' %}" alt="Mail Icon" />
                     <div>
                         <h4>Write To Us</h4>
                         <p>Fill out our form and we will contact you within 24 hours.</p>
