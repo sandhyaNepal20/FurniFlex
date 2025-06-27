@@ -35,6 +35,8 @@ urlpatterns = [
                     path('customize/', views.customize_view, name='customize'),
                     path('cart/', views.cart_view, name='cart'),
                         path('logout/', logout_view, name='logout'),
+                            path('placeorder/', views.placeorder_view, name='placeorder'),
+
 
 
 

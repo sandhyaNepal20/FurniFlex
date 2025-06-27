@@ -68,5 +68,7 @@ def customize_view(request):
     return render(request, 'customize.html')
 def cart_view(request):
     return render(request, 'cart.html')
+def placeorder_view(request):
+    return render(request, 'placeorder.html')
 
 

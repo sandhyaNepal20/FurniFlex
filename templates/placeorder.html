@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Place Order - FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/placeorder.css' %}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+
+    {% include 'navbar.html' %}
+
+    <section class="placeorder-container">
+        <!-- LEFT SIDE IMAGE -->
+        <div class="order-left">
+            <img src="{% static 'images/sofa.png' %}" alt="Product Image">
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="order-right">
+            <!-- Add Address Button -->
+            <div class="order-top">
+                <button class="address-btn">Add Address +</button>
+            </div>
+
+            <!-- Quantity and Price -->
+            <div class="order-info">
+                <div class="info-row">
+                    <label class="label">Quantity</label>
+                    <select class="quantity-select">
+                        <option>01</option>
+                        <option>02</option>
+                        <option>03</option>
+                    </select>
+                </div>
+                <div class="info-row">
+                    <label class="label">Price</label>
+                    <p style="font-size: 15px;">Rs.65000</p>
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="cart-summary">
+                <h3>Cart Total</h3>
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>Rs 65000</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping:</span>
+                    <span>Free</span>
+                </div>
+                <hr />
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>Rs.65000</span>
+                </div>
+                <button class="place-order-btn">Place order</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Go Back Button -->
+    <div class="go-back-container">
+        <button onclick="history.back()" class="go-back-btn">&larr; Go back</button>
+    </div>
+
+    {% include 'footer.html' %}
+
+</body>
+
+</html>

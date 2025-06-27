@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    color: #000;
+}
+
+.placeorder-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 60px 80px;
+    gap: 100px;
+}
+
+
+/* LEFT SIDE IMAGE */
+.order-left img {
+    width: 100%;
+    max-width: 450px;
+    object-fit: contain;
+}
+
+.order-right {
+    flex: 1;
+    padding-top: 20px;
+    margin-left: 100px;
+}
+
+.order-top {
+    margin-bottom: 25px;
+}
+
+.address-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #000;
+    border-radius: 6px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.address-btn:hover {
+    background-color: #f5f5f5;
+}
+
+/* Quantity and Price Info */
+.order-info {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Match customize.css quantity dropdown */
+.quantity-select {
+    padding: 8px 12px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* ============ CART SUMMARY ============ */
+.cart-summary {
+    border: 1px solid #000;
+    padding: 20px 24px;
+    border-radius: 8px;
+    max-width: 320px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.cart-summary h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 10px 0;
+    color: #333;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
+}
+
+.summary-row.total {
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+/* Place Order Button */
+.place-order-btn {
+    margin-top: 24px;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #F89B54;
+    border: 1px solid #000;
+    color: #000;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.place-order-btn:hover {
+    background-color: #d87f35;
+}
+
+/* ============ GO BACK ============ */
+.go-back-container {
+    padding: 40px 80px;
+    text-align: left;
+}
+
+.go-back-btn {
+    background-color: #F89B54;
+    color: #000;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.go-back-btn:hover {
+    background-color: #d87f35;
+}
+
+/* ============ RESPONSIVE ============ */
+@media screen and (max-width: 900px) {
+    .placeorder-container {
+        flex-direction: column;
+        padding: 30px;
+    }
+
+    .order-left img {
+        max-width: 100%;
+    }
+
+    .order-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cart-summary {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .go-back-container {
+        padding: 20px 30px;
+        text-align: center;
+    }
+
+    .go-back-btn {
+        width: 100%;
+    }
+}
