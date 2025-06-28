@@ -114,6 +114,19 @@
                     categoryMenu.style.display = 'none';
                 }
             });
+
+            const categoryItems = document.querySelectorAll('#categoryMenu li');
+
+            categoryItems.forEach(item => {
+                item.style.cursor = 'pointer'; // Make items look clickable
+
+                item.addEventListener('click', () => {
+                    // Get the clicked category name and encode it for URL
+                    const categoryName = encodeURIComponent(item.textContent.trim());
+                    // Redirect to Django category view with query parameter
+                    window.location.href = `/category/?type=${categoryName}`;
+                });
+            });
         </script>
 
     </section>
@@ -184,6 +197,20 @@
             </div>
         </div>
     </section>
+    <script>
+        // Select all product cards
+        const productCards = document.querySelectorAll('.product-card');
+
+        productCards.forEach(card => {
+            card.style.cursor = 'pointer'; // show pointer cursor on hover
+
+            card.addEventListener('click', () => {
+                // Redirect to customize page when clicked
+                window.location.href = '/customize';
+            });
+        });
+    </script>
+
     <!-- About Us Section -->
     <section id="about" class="about-section">
         <h2>About Us</h2>

@@ -100,6 +100,19 @@
             </div>
         </div>
     </section>
+    <script>
+        // Select all product cards
+        const productCards = document.querySelectorAll('.product-card');
+
+        productCards.forEach(card => {
+            card.style.cursor = 'pointer'; // show pointer cursor on hover
+
+            card.addEventListener('click', () => {
+                // Redirect to customize page when clicked
+                window.location.href = '/customize';
+            });
+        });
+    </script>
 
     <!-- About Us Section -->
     <section id="about" class="about-section">

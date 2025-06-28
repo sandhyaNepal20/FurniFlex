@@ -6,8 +6,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Place Order - FurniFlex</title>
+
+    <!-- CSS Files -->
     <link rel="stylesheet" href="{% static 'css/placeorder.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/payment.css' %}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -69,7 +73,63 @@
         <button onclick="history.back()" class="go-back-btn">&larr; Go back</button>
     </div>
 
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-content">
+            <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+
+            <p class="location"><i class="fas fa-map-marker-alt"></i> <strong>Saraswotinagar, Chabahil</strong></p>
+            <p class="total-amount"><strong>Total Amount:</strong> Rs.65000</p>
+            <hr />
+
+            <h3>Credit & Debit Cards</h3>
+            <div class="card-option">
+                <input type="radio" name="card" id="card1" />
+                <label for="card1">
+                    <img src="{% static 'images/mastercard.png' %}" alt="Mastercard" />
+                    Axis Bank **** **** **** 8395
+                </label>
+            </div>
+
+            <div class="card-option">
+                <input type="radio" name="card" id="card2" />
+                <label for="card2">
+                    <img src="{% static 'images/visa.png' %}" alt="Visa" />
+                    HDFC Bank **** **** **** 6246
+                </label>
+            </div>
+
+            <button class="add-card-btn">+ Add New Card</button>
+
+            <h3>More Payment Options</h3>
+            <div class="other-options">
+                <button class="option-btn">Wallet <span>&#x276F;</span></button>
+                <button class="option-btn">Net Banking <span>&#x276F;</span></button>
+                <button class="option-btn">Cash on Delivery <span>&#x276F;</span></button>
+            </div>
+        </div>
+    </div>
+
     {% include 'footer.html' %}
+
+    <!-- JavaScript for Modal -->
+    <script>
+        const modal = document.getElementById('paymentModal');
+
+        document.querySelector('.place-order-btn').addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+
+        function closePaymentModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 
 </body>
 
