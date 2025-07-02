@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - FurniFlex</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+    <script defer src="{% static 'script.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #fff;
+        color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    .cart-container {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .cart-heading {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .cart-summary {
+        font-size: 20px;
+        display: flex;
+        gap: 40px;
+        margin-bottom: 20px;
+    }
+
+    .cart-divider {
+        border-top: 1px solid #e0e0e0;
+        margin: 30px 0;
+    }
+
+    .empty-message {
+        font-size: 20px;
+        font-weight: 400;
+        color: #000;
+    }
+</style>
+
+<body>
+    {% include 'navbar.html' %}
+    <div class="cart-container">
+        <h1 class="cart-heading">Your shopping cart</h1>
+        <div class="cart-summary">
+            <span>0 items</span>
+            <span>Rs 0</span>
+        </div>
+        <div class="cart-divider"></div>
+        <p class="empty-message">You do not have any products on your shopping list.</p>
+    </div>
+    <div class="signup-container">
+        <div class="form-box">
+            <div class="form-logo">
+                <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
+            </div>
+            <h2>Login</h2>
+
+            <!-- Show messages -->
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <p class="message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <p class="form-subtitle">Welcome back! Please login to your account.</p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="email" placeholder="Email" name="email" required />
+                <input type="password" placeholder="Password" name="password" required />
+
+                <div class="form-actions">
+                    <button type="submit">Log In</button>
+                    <a href="{% url 'password_reset' %}" class="forgot-password">Forgot Password?</a>
+                </div>
+            </form>
+
+            <p class="login-link">Don’t have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

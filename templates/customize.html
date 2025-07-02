@@ -6,137 +6,97 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FurniFlex</title>
+    <title>{{ product.name }} - Customize | FurniFlex</title>
+
     <link rel="stylesheet" href="{% static 'css/customize.css' %}" />
     <script defer src="{% static 'script.js' %}"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <!-- <script defer src="static/script.js"></script> -->
 </head>
 
 <body>
 
     {% include 'navbar.html' %}
+
+    <!-- Product Detail Section -->
     <section class="product-detail">
         <div class="container">
             <!-- Left: Image -->
             <div class="left">
                 <div class="main-image">
-                    <img src="{% static 'images/sofa.png' %}" alt="Main Sofa" />
+                    <img id="mainProductImage" src="{{ product.image.url }}" alt="{{ product.name }}" />
                 </div>
+                {% if thumbnails %}
                 <div class="thumbnails">
-                    <img src="{% static 'images/sofa_thumb1.png' %}" alt="Thumb 1" class="active" />
-                    <img src="{% static 'images/sofa_thumb2.png' %}" alt="Thumb 2" />
-                    <img src="{% static 'images/sofa_thumb3.png' %}" alt="Thumb 3" />
-                    <img src="{% static 'images/sofa_thumb4.png' %}" alt="Thumb 4" />
-                    <img src="{% static 'images/sofa_thumb5.png' %}" alt="Thumb 5" />
+                    {% for image_url in thumbnails %}
+                    <img src="{{ image_url }}" alt="Gallery Image {{ forloop.counter }}" class="thumbnail-img"
+                        data-src="{{ image_url }}" />
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
+
+
 
             <!-- Right: Product Info -->
             <div class="right">
-                <h1>BACKSALEN</h1>
+                <h1>{{ product.name }}</h1>
                 <div class="stars">
-                    <span>★★★★☆</span>
-                    <span class="reviews">(150 Reviews)</span>
+                    {% for i in "12345" %}
+                    {% if product.rating|default:0 >= i|add:"0" %}
+                    <span>★</span>
+                    {% else %}
+                    <span>☆</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span class="reviews">({{ product.reviews|default:"0" }} Reviews)</span>
                 </div>
-                <div class="price">Rs 65000</div>
-                <p class="desc">2-seat sofa, Hallarp gray</p>
+                <div class="price">Rs {{ product.price }}</div>
+                <p class="desc">{{ product.description }}</p>
 
+                <!-- Color Options -->
+                {% if product.color_options %}
                 <div class="color-group">
                     <label>Color</label>
                     <div class="colors">
-                        <span class="color black"></span>
-                        <span class="color gray"></span>
-                        <span class="color cream"></span>
-                        <span class="arrow">›</span>
+                        {% for color in product.color_options %}
+                        <span class="color {{ color|lower }}"></span>
+                        {% endfor %}
                     </div>
                 </div>
+                {% endif %}
 
+                <!-- Quantity Selector -->
                 <div class="quantity-group">
                     <label>Quantity</label>
-                    <select>
-                        <option>01</option>
-                        <option>02</option>
-                        <option>03</option>
+                    <select name="quantity" id="product-qty">
+                        {% for i in "12345" %}
+                        <option>{{ i }}</option>
+                        {% endfor %}
                     </select>
                 </div>
 
+                <!-- Buttons -->
                 <div class="button-row">
-                    <button class="wishlist">♡</button>
-                    <button class="add-cart">Add To Cart</button>
-                    <a href="{% url 'placeorder' %}" class="buy-now">Buy Now</a>
+                    <form method="POST" action="{% url 'add_to_save' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" class="wishlist">♡</button>
+                    </form>
+                    <button class="add-cart" data-id="{{ product.id }}" data-name="{{ product.name }}"
+                        data-price="{{ product.price }}" data-img="{{ product.image.url }}">
+                        Add To Cart
+                    </button>
+                    <a id="buy-now-btn" href="#" class="buy-now">Buy Now</a>
                 </div>
-
             </div>
+        </div>
     </section>
-    <!-- Divider -->
+
     <hr class="section-divider" />
-    <!-- Products Section -->
-    <section id="products" class="products-section">
-        <div class="products-header">
-            <h2>Best Sellers</h2>
-        </div>
 
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(50 Reviews)</span>
-                </div>
-            </div>
 
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(100 Reviews)</span>
-                </div>
-            </div>
 
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(500 Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(15 Reviews)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- About Us Section -->
+    <!-- About Us -->
     <section id="about" class="about-section">
         <h2>About Us</h2>
         <div class="about-container">
@@ -145,31 +105,23 @@
             </div>
             <div class="about-content">
                 <h3>Affordable furniture for every home</h3>
-                <p>
-                    FurniFlex is a modern digital platform built to help you plan, visualize, and customize furniture
-                    that fits your lifestyle and space—without the pressure of online shopping. We’re not an e-commerce
-                    site. Instead, we focus entirely on empowering users to explore different furniture styles, sizes,
-                    materials, and color options in a creative and personalized way.
-                </p>
-                <p>
-                    Whether you're a homeowner trying to find the right sofa size for your living room, a student
-                    decorating a dorm, or an interior designer experimenting with ideas, FurniFlex is made for you.
-                </p>
+                <p>FurniFlex is a modern digital platform built to help you plan, visualize, and customize furniture
+                    that fits your lifestyle and space—without the pressure of online shopping.</p>
+                <p>Whether you're a homeowner, student, or designer—FurniFlex is made for you.</p>
             </div>
         </div>
     </section>
 
-    <!-- Contact Us Section -->
+    <!-- Contact Us -->
     <section id="contact" class="contact-section">
         <h2>Contact Us</h2>
         <div class="contact-wrapper">
-            <!-- Contact Info Box -->
             <div class="contact-info">
                 <div class="info-block">
                     <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
                     <div>
                         <h4>Call To Us</h4>
-                        <p>We are available 24/7, 7 days a week.</p>
+                        <p>Available 24/7</p>
                         <p>Phone: +977 9768467330</p>
                     </div>
                 </div>
@@ -178,14 +130,12 @@
                     <img class="responsive-img-small" src="{% static 'images/msg.png' %}" alt="Mail Icon" />
                     <div>
                         <h4>Write To Us</h4>
-                        <p>Fill out our form and we will contact you within 24 hours.</p>
-                        <p>Emails: customer@gmail.com</p>
-                        <p>Emails: furniflex@gmail.com</p>
+                        <p>Email: customer@gmail.com</p>
+                        <p>Email: furniflex@gmail.com</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Form -->
             <form class="contact-form">
                 <div class="form-row">
                     <input type="text" placeholder="Your Name *" required />
@@ -198,10 +148,59 @@
         </div>
     </section>
 
+    {% include 'footer.html' %}
+
+    <!-- 🛒 Add to Cart Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const addCartBtn = document.querySelector('.add-cart');
+            const buyNowBtn = document.getElementById('buy-now-btn');
+
+            if (addCartBtn) {
+                addCartBtn.addEventListener('click', () => {
+                    const id = addCartBtn.dataset.id;
+                    const name = addCartBtn.dataset.name;
+                    const price = parseFloat(addCartBtn.dataset.price);
+                    const image = addCartBtn.dataset.img;
+                    const quantity = parseInt(document.getElementById('product-qty').value);
+
+                    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+                    const existingItem = cart.find(item => item.id === id);
+                    if (existingItem) {
+                        existingItem.quantity += quantity;
+                    } else {
+                        cart.push({ id, name, price, image, quantity });
+                    }
+
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    alert(`${name} added to cart (${quantity})`);
+                });
+            }
+
+            if (buyNowBtn) {
+                buyNowBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const productId = addCartBtn.dataset.id;
+                    const quantity = document.getElementById('product-qty').value;
+                    window.location.href = `{% url 'placeorder' %}?product_id=${productId}&quantity=${quantity}`;
+                });
+            }
+        });
+        // 🔁 Handle thumbnail clicks
+        const thumbnails = document.querySelectorAll('.thumbnail-img');
+        const mainImage = document.getElementById('mainProductImage');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', () => {
+                const newSrc = thumb.getAttribute('data-src');
+                mainImage.src = newSrc;
+            });
+        });
+
+    </script>
+
 
 </body>
-{% include 'footer.html' %}
-
-
 
 </html>

@@ -7,12 +7,70 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FurniFlex</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/searchproduct.css' %}" />
     <script defer src="{% static 'script.js' %}"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <!-- <script defer src="static/script.js"></script> -->
 </head>
+<style>
+    @keyframes fadeSlideWord {
+        0% {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-text.top-left {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 28px;
+        font-weight: 600;
+        padding: 8px 12px;
+        color: #000;
+        border-radius: 6px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    /* Animate each word */
+    .hero-text.top-left .word {
+        opacity: 0;
+        animation: fadeSlideWord 0.6s ease-out forwards;
+    }
+
+    /* Delay each word a little more */
+    .hero-text.top-left .word:nth-child(1) {
+        animation-delay: 0.3s;
+    }
+
+    .hero-text.top-left .word:nth-child(2) {
+        animation-delay: 0.6s;
+    }
+
+    .hero-text.top-left .word:nth-child(3) {
+        animation-delay: 0.9s;
+    }
+
+    .hero-text.top-left .word:nth-child(4) {
+        animation-delay: 1.2s;
+    }
+
+    .hero-text.top-left .word:nth-child(5) {
+        animation-delay: 1.5s;
+    }
+
+    .hero-text.top-left .word:nth-child(6) {
+        animation-delay: 1.8s;
+    }
+</style>
 
 <body>
 
@@ -22,7 +80,14 @@
     <section class="hero">
         <div class="slide left">
             <img src="static/images/cover.jpeg" alt="Living Room" />
-            <div class="hero-text top-left">Make Your Home Feel Like You</div>
+            <div class="hero-text top-left">
+                <span class="word">Make</span>
+                <span class="word">Your</span>
+                <span class="word">Home</span>
+                <span class="word">Feel</span>
+                <span class="word">Like</span>
+                <span class="word">You</span>
+            </div>
         </div>
         <div class="slide right">
             <img src="static/images/cover.jpeg" alt="Living Room" />
@@ -39,80 +104,42 @@
     <section id="products" class="products-section">
         <div class="products-header">
             <h2>Products</h2>
-            <button class="view-all-btn">View All</button>
+            <a href="{% url 'searchproduct' %}">
+                <button class="view-all-btn">View All</button>
+            </a>
         </div>
 
         <div class="product-grid">
-            <div class="product-card">
-                <img src="static/images/chair.png" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(50 Reviews)</span>
-                </div>
-            </div>
+            {% for product in products %}
+            <div class="product-card" onclick="window.location.href='/customize/{{ product.id }}/'">
+                <!-- Product Image -->
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" />
 
-            <div class="product-card">
-                <img src="static/images/sofa.png" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(100 Reviews)</span>
-                </div>
-            </div>
+                <!-- Product Name -->
+                <h4>{{ product.name }}</h4>
 
-            <div class="product-card">
-                <img src="static/images/b.png" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(500 Reviews)</span>
-                </div>
-            </div>
+                <!-- Price -->
+                <p class="price">Rs.{{ product.price }}</p>
 
-            <div class="product-card">
-                <img src="static/images/w.png" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(15 Reviews)</span>
+                <!-- Rating -->
+                <div class="rating">
+                    {% for i in "12345" %}
+                    {% if product.rating|default:0 >= i|add:"0" %}
+                    <span class="star full">★</span>
+                    {% else %}
+                    <span class="star">☆</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span class="review-count">({{ product.reviews|default:"0" }} Reviews)</span>
                 </div>
             </div>
+            {% empty %}
+            <p>No products available.</p>
+            {% endfor %}
         </div>
     </section>
-    <script>
-        // Select all product cards
-        const productCards = document.querySelectorAll('.product-card');
 
-        productCards.forEach(card => {
-            card.style.cursor = 'pointer'; // show pointer cursor on hover
 
-            card.addEventListener('click', () => {
-                // Redirect to customize page when clicked
-                window.location.href = '/customize';
-            });
-        });
-    </script>
 
     <!-- About Us Section -->
     <section id="about" class="about-section">

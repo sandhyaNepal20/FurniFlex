@@ -228,3 +228,15 @@ body {
         padding: 12px;
     }
 }
+
+button.wishlist {
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #e27689;
+    cursor: pointer;
+}
+
+button.wishlist:hover {
+    transform: scale(1.1);
+}

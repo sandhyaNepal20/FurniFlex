@@ -43,7 +43,12 @@
                 <a href="{% url 'login' %}" class="mobile-only">Login / Sign Up</a>
                 {% endif %}
 
-                <a href="{% url 'cart' %}" class="cart-icon mobile-only">🛒 Cart</a>
+                <a href="{% url 'wishlist' %}" class="icon-link mobile-only">
+                    <img src="{% static 'images/wishlist.png' %}" alt="Wishlist" class="nav-icon-img" />
+                </a>
+                <a href="{% url 'cart' %}" class="icon-link mobile-only">
+                    <img src="{% static 'images/cart.png' %}" alt="Cart" class="nav-icon-img" />
+                </a>
         </nav>
 
 
@@ -59,7 +64,12 @@
             {% else %}
             <a href="{% url 'login' %}" class="login-btn">Login / Sign Up</a>
             {% endif %}
-            <a href="{% url 'cart' %}" class="cart-icon">🛒</a>
+            <a href="{% url 'wishlist' %}" class="icon-link">
+                <img src="{% static 'images/wishlist.png' %}" alt="Wishlist" class="nav-icon-img" />
+            </a>
+            <a href="{% url 'cart' %}" class="icon-link">
+                <img src="{% static 'images/cart.png' %}" alt="Cart" class="nav-icon-img" />
+            </a>
         </div>
     </header>
     <script>

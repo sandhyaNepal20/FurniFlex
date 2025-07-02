@@ -1,17 +1,75 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FurniFlex</title>
+    <title>Sign Up - FurniFlex</title>
     <link rel="stylesheet" href="{% static 'css/login.css' %}" />
     <script defer src="{% static 'script.js' %}"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <!-- <script defer src="static/script.js"></script> -->
+
+    <!-- Message Popup Styles -->
+    <style>
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        .message-popup.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .message-popup.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-popup.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+
+        .message-popup.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .message-popup.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            float: right;
+            font-size: 18px;
+            cursor: pointer;
+            color: inherit;
+            margin-left: 10px;
+            padding: 0;
+            line-height: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,14 +86,15 @@
 
             <!-- Messages -->
             {% if messages %}
-            <div class="messages">
+            <div class="messages" style="display: none;">
                 {% for message in messages %}
-                <p class="message {{ message.tags }}">{{ message }}</p>
+                <p class="message {{ message.tags }}" data-message="{{ message }}" data-type="{{ message.tags }}">{{
+                    message }}</p>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <form method="POST" novalidate>
+            <form method="POST" id="registerForm" novalidate>
                 {% csrf_token %}
                 <input type="text" name="name" placeholder="Full Name" required autofocus autocomplete="name" />
                 <input type="email" name="email" placeholder="Email Address" required autocomplete="email" />
@@ -51,138 +110,79 @@
         </div>
     </div>
 
-    <!-- Divider -->
-    <hr class="section-divider" />
-    <!-- Products Section -->
-    <section id="products" class="products-section">
-        <div class="products-header">
-            <h2>Best Sellers</h2>
-        </div>
+    {% include 'footer.html' %}
 
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(50 Reviews)</span>
-                </div>
-            </div>
+    <!-- Message Popup Script -->
+    <script>
+        function showPopupMessage(message, type) {
+            const existingPopup = document.querySelector('.message-popup');
+            if (existingPopup) {
+                existingPopup.remove();
+            }
 
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(100 Reviews)</span>
-                </div>
-            </div>
+            const popup = document.createElement('div');
+            popup.className = `message-popup ${type}`;
+            popup.innerHTML = `
+                ${message}
+                <button class="popup-close" onclick="closePopup(this)">&times;</button>
+            `;
 
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(500 Reviews)</span>
-                </div>
-            </div>
+            document.body.appendChild(popup);
 
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(15 Reviews)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- About Us Section -->
-    <section id="about" class="about-section">
-        <h2>About Us</h2>
-        <div class="about-container">
-            <div class="about-image">
-                <img class="responsive-img" src="{% static 'images/cover.jpeg' %}" alt="Modern Living Room" />
-            </div>
-            <div class="about-content">
-                <h3>Affordable furniture for every home</h3>
-                <p>
-                    FurniFlex is a modern digital platform built to help you plan, visualize, and customize furniture
-                    that fits your lifestyle and space—without the pressure of online shopping. We’re not an e-commerce
-                    site. Instead, we focus entirely on empowering users to explore different furniture styles, sizes,
-                    materials, and color options in a creative and personalized way.
-                </p>
-                <p>
-                    Whether you're a homeowner trying to find the right sofa size for your living room, a student
-                    decorating a dorm, or an interior designer experimenting with ideas, FurniFlex is made for you.
-                </p>
-            </div>
-        </div>
-    </section>
+            setTimeout(() => {
+                popup.classList.add('show');
+            }, 100);
 
-    <!-- Contact Us Section -->
-    <section id="contact" class="contact-section">
-        <h2>Contact Us</h2>
-        <div class="contact-wrapper">
-            <!-- Contact Info Box -->
-            <div class="contact-info">
-                <div class="info-block">
-                    <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
-                    <div>
-                        <h4>Call To Us</h4>
-                        <p>We are available 24/7, 7 days a week.</p>
-                        <p>Phone: +977 9768467330</p>
-                    </div>
-                </div>
-                <hr />
-                <div class="info-block">
-                    <img class="responsive-img-small" src="{% static 'images/msg.png' %}" alt="Mail Icon" />
-                    <div>
-                        <h4>Write To Us</h4>
-                        <p>Fill out our form and we will contact you within 24 hours.</p>
-                        <p>Emails: customer@gmail.com</p>
-                        <p>Emails: furniflex@gmail.com</p>
-                    </div>
-                </div>
-            </div>
+            setTimeout(() => {
+                closePopup(popup.querySelector('.popup-close'));
+            }, 5000);
+        }
 
-            <!-- Contact Form -->
-            <form class="contact-form">
-                <div class="form-row">
-                    <input type="text" placeholder="Your Name *" required />
-                    <input type="email" placeholder="Your Email *" required />
-                    <input type="tel" placeholder="Your Phone *" required />
-                </div>
-                <textarea placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-    </section>
+        function closePopup(closeBtn) {
+            const popup = closeBtn.parentElement;
+            popup.classList.remove('show');
+            setTimeout(() => {
+                popup.remove();
+            }, 300);
+        }
 
+        // Show messages from Django on load
+        document.addEventListener('DOMContentLoaded', function () {
+            const messages = document.querySelectorAll('.messages .message');
+            messages.forEach(function (messageEl) {
+                const message = messageEl.dataset.message;
+                const type = messageEl.dataset.type;
+                showPopupMessage(message, type);
+            });
+        });
 
+        // Optionally validate before submission
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            const password = this.querySelector('input[name="password"]').value;
+            const confirm = this.querySelector('input[name="confirm_password"]').value;
+            if (password !== confirm) {
+                e.preventDefault();
+                showPopupMessage("Passwords do not match.", "error");
+            }
+        });
+
+        // Optional URL-based messages
+        (function checkUrlForMessages() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMsg = urlParams.get('success');
+            const errorMsg = urlParams.get('error');
+
+            if (successMsg) {
+                showPopupMessage(decodeURIComponent(successMsg), 'success');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            if (errorMsg) {
+                showPopupMessage(decodeURIComponent(errorMsg), 'error');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        })();
+    </script>
 </body>
-{% include 'footer.html' %}
-
-
 
 </html>

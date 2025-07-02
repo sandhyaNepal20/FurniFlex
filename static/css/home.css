@@ -55,7 +55,26 @@ nav a {
 }
 
 .cart-icon {
-    font-size: 20px;
+    font-size: 24px;
+    text-decoration: none;
+
+}
+
+.icon-link {
+    display: inline-block;
+    margin-left: 16px;
+}
+
+.nav-icon-img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    vertical-align: middle;
+    transition: transform 0.2s ease;
+}
+
+.nav-icon-img:hover {
+    transform: scale(1.1);
 }
 
 /* .cart-icon:hover {
@@ -148,6 +167,33 @@ nav a {
 
 
 /* HERO SECTION */
+@keyframes fadeSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.hero-text.top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #000;
+    font-size: 28px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 6px;
+
+    opacity: 0;
+    animation: fadeSlideIn 4s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
 .hero {
     display: flex;
     flex-wrap: nowrap;

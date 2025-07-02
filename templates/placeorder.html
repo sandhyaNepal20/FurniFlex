@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Place Order - FurniFlex</title>
 
-    <!-- CSS Files -->
     <link rel="stylesheet" href="{% static 'css/placeorder.css' %}" />
     <link rel="stylesheet" href="{% static 'css/payment.css' %}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
@@ -21,7 +20,7 @@
     <section class="placeorder-container">
         <!-- LEFT SIDE IMAGE -->
         <div class="order-left">
-            <img src="{% static 'images/sofa.png' %}" alt="Product Image">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
         </div>
 
         <!-- RIGHT SIDE -->
@@ -35,15 +34,13 @@
             <div class="order-info">
                 <div class="info-row">
                     <label class="label">Quantity</label>
-                    <select class="quantity-select">
-                        <option>01</option>
-                        <option>02</option>
-                        <option>03</option>
+                    <select class="quantity-select" disabled>
+                        <option>{{ quantity }}</option>
                     </select>
                 </div>
                 <div class="info-row">
                     <label class="label">Price</label>
-                    <p style="font-size: 15px;">Rs.65000</p>
+                    <p style="font-size: 15px;">Rs.{{ product.price }}</p>
                 </div>
             </div>
 
@@ -52,7 +49,7 @@
                 <h3>Cart Total</h3>
                 <div class="summary-row">
                     <span>Subtotal:</span>
-                    <span>Rs 65000</span>
+                    <span>Rs {{ product.price }}</span>
                 </div>
                 <div class="summary-row">
                     <span>Shipping:</span>
@@ -61,7 +58,7 @@
                 <hr />
                 <div class="summary-row total">
                     <span>Total:</span>
-                    <span>Rs.65000</span>
+                    <span>Rs {{ total_price }}</span>
                 </div>
                 <button class="place-order-btn">Place order</button>
             </div>
@@ -76,43 +73,72 @@
     <!-- Payment Modal -->
     <div id="paymentModal" class="payment-modal">
         <div class="payment-content">
-            <span class="close-btn" onclick="closePaymentModal()">&times;</span>
+            <!-- Location -->
+            <div class="location-row">
+                <img src="{% static 'images/location.png' %}" alt="Location">
+                <span>Saraswotinagar, Chabahil</span>
+            </div>
 
-            <p class="location"><i class="fas fa-map-marker-alt"></i> <strong>Saraswotinagar, Chabahil</strong></p>
-            <p class="total-amount"><strong>Total Amount:</strong> Rs.65000</p>
-            <hr />
+            <!-- Total Amount -->
+            <div class="amount-row">
+                <strong>Total Amount</strong>
+                <span class="amount">Rs {{ total_price }}</span>
+            </div>
 
+            <hr>
+
+            <!-- Credit & Debit Cards -->
             <h3>Credit & Debit Cards</h3>
-            <div class="card-option">
-                <input type="radio" name="card" id="card1" />
-                <label for="card1">
-                    <img src="{% static 'images/mastercard.png' %}" alt="Mastercard" />
-                    Axis Bank **** **** **** 8395
-                </label>
+
+            <label class="card-item">
+                <div class="card-left">
+                    <img src="{% static 'images/mastercard.png' %}" alt="Mastercard">
+                    <span>Axis Bank <b>**** **** **** 8395</b></span>
+                </div>
+                <input type="radio" name="card" />
+                <span class="custom-radio"></span>
+            </label>
+
+            <label class="card-item">
+                <div class="card-left">
+                    <img src="{% static 'images/visa.png' %}" alt="Visa">
+                    <span>HDFC Bank <b>**** **** **** 6246</b></span>
+                </div>
+                <input type="radio" name="card" />
+                <span class="custom-radio"></span>
+            </label>
+
+            <!-- Add Card -->
+            <div class="add-card">
+                <span class="plus-box">+</span>
+                <span>Add New Card</span>
             </div>
 
-            <div class="card-option">
-                <input type="radio" name="card" id="card2" />
-                <label for="card2">
-                    <img src="{% static 'images/visa.png' %}" alt="Visa" />
-                    HDFC Bank **** **** **** 6246
-                </label>
-            </div>
-
-            <button class="add-card-btn">+ Add New Card</button>
-
+            <!-- More Payment Options -->
             <h3>More Payment Options</h3>
-            <div class="other-options">
-                <button class="option-btn">Wallet <span>&#x276F;</span></button>
-                <button class="option-btn">Net Banking <span>&#x276F;</span></button>
-                <button class="option-btn">Cash on Delivery <span>&#x276F;</span></button>
+
+            <div class="payment-options-box">
+                <div class="option">
+                    <img src="{% static 'images/wallet.png' %}" alt="Wallet">
+                    <span>Wallet</span>
+                    <span class="arrow">&#x276F;</span>
+                </div>
+                <div class="option">
+                    <img src="{% static 'images/bank.png' %}" alt="Bank">
+                    <span>Net Banking</span>
+                    <span class="arrow">&#x276F;</span>
+                </div>
+                <div class="option">
+                    <img src="{% static 'images/cash.png' %}" alt="Cash">
+                    <span>Cash on Delivery</span>
+                    <span class="arrow">&#x276F;</span>
+                </div>
             </div>
         </div>
     </div>
 
     {% include 'footer.html' %}
 
-    <!-- JavaScript for Modal -->
     <script>
         const modal = document.getElementById('paymentModal');
 

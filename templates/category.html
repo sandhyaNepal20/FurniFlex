@@ -31,82 +31,38 @@
 
 
     <!-- Products Section -->
-    <section id="products" class="products-section">
-        <div class="products-header">
-            <h2>Best Sellers</h2>
-        </div>
 
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(50 Reviews)</span>
-                </div>
-            </div>
+    <hr class="section-divider" />
 
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(100 Reviews)</span>
-                </div>
-            </div>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card" onclick="window.location.href='/customize/{{ product.id }}/'">
+            <!-- Product Image -->
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" />
 
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(500 Reviews)</span>
-                </div>
-            </div>
+            <!-- Product Name -->
+            <h4>{{ product.name }}</h4>
 
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(15 Reviews)</span>
-                </div>
+            <!-- Price -->
+            <p class="price">Rs.{{ product.price }}</p>
+
+            <!-- Rating -->
+            <div class="rating">
+                {% for i in "12345" %}
+                {% if product.rating|default:0 >= i|add:"0" %}
+                <span class="star full">★</span>
+                {% else %}
+                <span class="star">☆</span>
+                {% endif %}
+                {% endfor %}
+                <span class="review-count">({{ product.reviews|default:"0" }} Reviews)</span>
             </div>
         </div>
+        {% empty %}
+        <p>No products available.</p>
+        {% endfor %}
+    </div>
     </section>
-    <script>
-        // Select all product cards
-        const productCards = document.querySelectorAll('.product-card');
-
-        productCards.forEach(card => {
-            card.style.cursor = 'pointer'; // show pointer cursor on hover
-
-            card.addEventListener('click', () => {
-                // Redirect to customize page when clicked
-                window.location.href = '/customize';
-            });
-        });
-    </script>
     <!-- About Us Section -->
     <section id="about" class="about-section">
         <h2>About Us</h2>

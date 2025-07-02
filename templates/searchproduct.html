@@ -1,138 +1,74 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>FurniFlex</title>
+    <title>FurniFlex - Search Products</title>
 
-    <link rel="stylesheet" href="{% static 'css/searchproduct.css' %}" />
+    <!-- Use same CSS as homepage to ensure card design is identical -->
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/product.css' %}" />
+
     <script defer src="{% static 'script.js' %}"></script>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-    <!-- <script defer src="static/script.js"></script> -->
 </head>
 
 <body>
-
     {% include 'navbar.html' %}
-    <script>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            });
-        });
-
-        function smoothScroll(target, duration) {
-            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - startPosition;
-            let startTime = null;
-
-            function animation(currentTime) {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                // easing function for smoothness (easeInOutCubic)
-                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) {
-                    requestAnimationFrame(animation);
-                }
-            }
-
-            // easeInOutCubic easing function
-            function easeInOutCubic(t, b, c, d) {
-                t /= d / 2;
-                if (t < 1) return c / 2 * t * t * t + b;
-                t -= 2;
-                return c / 2 * (t * t * t + 2) + b;
-            }
-
-            requestAnimationFrame(animation);
-        }
-
-        // Attach smooth scroll event to nav links with class 'nav-link'
-        document.querySelectorAll('a.nav-link').forEach(link => {
-            link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetID = this.getAttribute('href').substring(1);
-                const targetSection = document.getElementById(targetID);
-                if (targetSection) {
-                    smoothScroll(targetSection, 700); // 600ms duration for smooth scroll
-                }
-            });
-        });
-    </script>
-
-    <!-- Search and Category Section -->
+    <!-- Search + Category -->
     <section class="search-category-section">
         <div class="search-container">
-            <!-- Search Bar -->
             <div class="search-bar">
                 <span class="search-icon">🔍</span>
                 <input type="text" placeholder="What are you looking for?" class="search-input" />
             </div>
-
-            <!-- Search Button -->
             <button class="search-button">Search</button>
         </div>
 
-        <!-- Category Dropdown -->
         <div class="category-dropdown">
             <button class="category-button" id="categoryBtn">
                 Select Categories
                 <span class="dropdown-arrow">▼</span>
             </button>
-            <ul class="category-menu" id="categoryMenu">
-                <li>Sofa</li>
-                <li>Beds</li>
-                <li>Chair</li>
-                <li>Table</li>
-                <li>Wardrobe</li>
+            <ul class="category-menu" id="categoryMenu" style="display: none;">
+                {% for category in categories %}
+                <li data-category-id="{{ category.id }}">{{ category.name }}</li>
+                {% endfor %}
             </ul>
         </div>
-        <script>
-            const categoryBtn = document.getElementById('categoryBtn');
-            const categoryMenu = document.getElementById('categoryMenu');
-
-            categoryBtn.addEventListener('click', () => {
-                const isVisible = categoryMenu.style.display === 'block';
-                categoryMenu.style.display = isVisible ? 'none' : 'block';
-            });
-
-            // Close dropdown if clicked outside
-            document.addEventListener('click', (event) => {
-                if (!categoryBtn.contains(event.target) && !categoryMenu.contains(event.target)) {
-                    categoryMenu.style.display = 'none';
-                }
-            });
-
-            const categoryItems = document.querySelectorAll('#categoryMenu li');
-
-            categoryItems.forEach(item => {
-                item.style.cursor = 'pointer'; // Make items look clickable
-
-                item.addEventListener('click', () => {
-                    // Get the clicked category name and encode it for URL
-                    const categoryName = encodeURIComponent(item.textContent.trim());
-                    // Redirect to Django category view with query parameter
-                    window.location.href = `/category/?type=${categoryName}`;
-                });
-            });
-        </script>
-
     </section>
+
+    <script>
+        const categoryBtn = document.getElementById('categoryBtn');
+        const categoryMenu = document.getElementById('categoryMenu');
+
+        categoryBtn.addEventListener('click', () => {
+            const isVisible = categoryMenu.style.display === 'block';
+            categoryMenu.style.display = isVisible ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!categoryBtn.contains(event.target) && !categoryMenu.contains(event.target)) {
+                categoryMenu.style.display = 'none';
+            }
+        });
+
+        const categoryItems = document.querySelectorAll('#categoryMenu li');
+        categoryItems.forEach(item => {
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', () => {
+                const categoryName = encodeURIComponent(item.textContent.trim());
+                window.location.href = `/category/?type=${categoryName}`;
+            });
+        });
+    </script>
 
     <!-- Divider -->
     <hr class="section-divider" />
+
     <!-- Products Section -->
     <section id="products" class="products-section">
         <div class="products-header">
@@ -140,78 +76,29 @@
         </div>
 
         <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(50 Reviews)</span>
+            {% for product in products %}
+            <div class="product-card" onclick="window.location.href='/customize/{{ product.id }}/'">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+                <h4>{{ product.name }}</h4>
+                <p class="price">Rs.{{ product.price }}</p>
+                <div class="rating">
+                    {% for i in "12345" %}
+                    {% if product.rating|default:0 >= i|add:"0" %}
+                    <span class="star full">★</span>
+                    {% else %}
+                    <span class="star">☆</span>
+                    {% endif %}
+                    {% endfor %}
+                    <span class="review-count">({{ product.reviews|default:"0" }} Reviews)</span>
                 </div>
             </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(100 Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(500 Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating" data-selected="0">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
-                    <span class="review-count">(15 Reviews)</span>
-                </div>
-            </div>
+            {% empty %}
+            <p style="grid-column: span 4; text-align: center;">No products found.</p>
+            {% endfor %}
         </div>
     </section>
-    <script>
-        // Select all product cards
-        const productCards = document.querySelectorAll('.product-card');
 
-        productCards.forEach(card => {
-            card.style.cursor = 'pointer'; // show pointer cursor on hover
-
-            card.addEventListener('click', () => {
-                // Redirect to customize page when clicked
-                window.location.href = '/customize';
-            });
-        });
-    </script>
-
-    <!-- About Us Section -->
+    <!-- About Section -->
     <section id="about" class="about-section">
         <h2>About Us</h2>
         <div class="about-container">
@@ -222,9 +109,7 @@
                 <h3>Affordable furniture for every home</h3>
                 <p>
                     FurniFlex is a modern digital platform built to help you plan, visualize, and customize furniture
-                    that fits your lifestyle and space—without the pressure of online shopping. We’re not an e-commerce
-                    site. Instead, we focus entirely on empowering users to explore different furniture styles, sizes,
-                    materials, and color options in a creative and personalized way.
+                    that fits your lifestyle and space—without the pressure of online shopping.
                 </p>
                 <p>
                     Whether you're a homeowner trying to find the right sofa size for your living room, a student
@@ -234,11 +119,10 @@
         </div>
     </section>
 
-    <!-- Contact Us Section -->
+    <!-- Contact Section -->
     <section id="contact" class="contact-section">
         <h2>Contact Us</h2>
         <div class="contact-wrapper">
-            <!-- Contact Info Box -->
             <div class="contact-info">
                 <div class="info-block">
                     <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
@@ -254,13 +138,12 @@
                     <div>
                         <h4>Write To Us</h4>
                         <p>Fill out our form and we will contact you within 24 hours.</p>
-                        <p>Emails: customer@gmail.com</p>
-                        <p>Emails: furniflex@gmail.com</p>
+                        <p>Email: customer@gmail.com</p>
+                        <p>Email: furniflex@gmail.com</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Contact Form -->
             <form class="contact-form">
                 <div class="form-row">
                     <input type="text" placeholder="Your Name *" required />
@@ -273,11 +156,7 @@
         </div>
     </section>
 
-
-
+    {% include 'footer.html' %}
 </body>
-{% include 'footer.html' %}
-
-
 
 </html>

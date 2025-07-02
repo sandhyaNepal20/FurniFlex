@@ -21,34 +21,44 @@
     <section class="edit-profile-page">
         <h2>Edit Your Profile</h2>
 
-        <form class="edit-form">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form class="edit-form" method="POST">
+            {% csrf_token %}
+
             <!-- Full Name -->
             <div class="form-group">
                 <label for="fullname">Full Name</label>
-                <input type="text" id="fullname" name="fullname" value="Sandhya Nepal" />
+                <input type="text" id="fullname" name="fullname" value="{{ name }}" required />
             </div>
 
-            <!-- Email -->
+            <!-- Email (readonly) -->
             <div class="form-group">
                 <label for="email">Email</label>
-                <p class="email-display">sandhyanepal54@gmail.com</p>
+                <p class="email-display">{{ email }}</p>
             </div>
 
             <!-- Phone Number -->
             <div class="form-group">
                 <label for="phone">Phone Number</label>
-                <input type="text" id="phone" name="phone" value="9766467330" />
+                <input type="text" id="phone" name="phone" value="{{ phone }}" required pattern="[0-9]{10,15}" />
             </div>
 
-            <!-- Password Section -->
+            <!-- Password Change Section -->
             <div class="form-group">
-                <label>Password Changes</label>
-                <input type="password" placeholder="Current Password" />
-                <input type="password" placeholder="New Password" />
-                <input type="password" placeholder="Confirm New Password" />
+                <label>Password Changes (optional)</label>
+                <input type="password" name="current_password" placeholder="Current Password" />
+                <input type="password" name="new_password" placeholder="New Password" />
+                <input type="password" name="confirm_password" placeholder="Confirm New Password" />
             </div>
 
-            <!-- Save Button -->
             <button type="submit" class="save-button">Save Changes</button>
         </form>
     </section>
