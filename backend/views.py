@@ -13,6 +13,8 @@ from django.contrib.auth.models import User   # <--- Add this line
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 import random
+from django.conf import settings
+
 def home_view(request):
     products = Product.objects.all()[:4]  # Fetch only top 4 for homepage
     categories = Category.objects.all()  # corrected variable name to plural 'categories'
@@ -205,12 +207,18 @@ def edit_profile_view(request):
     }
     return render(request, 'editprofile.html', context)
 
-def category_view(request):
-    category_name = request.GET.get('type')
+def searchproduct_view(request):
+    category_name = request.GET.get('type')  # Category from dropdown
+    search_query = request.GET.get('q')  # Optional: from search bar
+
+    categories = Category.objects.all().order_by('name')
     products = Product.objects.all()
 
     if category_name:
         products = products.filter(category__name__iexact=category_name)
+
+    if search_query:
+        products = products.filter(name__icontains=search_query)
 
     for product in products:
         try:
@@ -218,28 +226,54 @@ def category_view(request):
         except:
             product.color_options = []
 
-    return render(request, 'category.html', {
+    return render(request, 'searchproduct.html', {
         'products': products,
-        'category_name': category_name,
+        'categories': categories,
+        'selected_category': category_name,
+        'search_query': search_query,
     })
 
+# def customize_product_view(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+
+#     thumbnails = []
+#     for thumb in [product.thumbnail1, product.thumbnail2, product.thumbnail3, product.thumbnail4, product.thumbnail5]:
+#         if thumb:
+#             thumbnails.append(thumb.url)
+
+#     try:
+#         color_variants = json.loads(product.color_options or "[]")
+#     except:
+#         color_variants = []
+
+#     return render(request, 'customize.html', {
+#         'product': product,
+#         'thumbnails': thumbnails,
+#         'color_variants': color_variants,
+#     })
 def customize_product_view(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
+    # Get thumbnails
     thumbnails = []
     for thumb in [product.thumbnail1, product.thumbnail2, product.thumbnail3, product.thumbnail4, product.thumbnail5]:
         if thumb:
             thumbnails.append(thumb.url)
 
+    # Get color options
     try:
         color_variants = json.loads(product.color_options or "[]")
     except:
         color_variants = []
 
+    # 🔁 Related products by same category
+    related_products = Product.objects.filter(category=product.category).exclude(id=product.id)[:4]
+
     return render(request, 'customize.html', {
         'product': product,
         'thumbnails': thumbnails,
         'color_variants': color_variants,
+        'related_products': related_products,  # ✅ pass to template
     })
 
 
@@ -282,3 +316,67 @@ def save_view(request):
     products = sorted(products, key=lambda x: saved_ids.index(x.id))
 
     return render(request, 'save.html', {'products': products})
+
+# def contact_view(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         email = request.POST.get('email')
+#         phone = request.POST.get('phone')
+#         message = request.POST.get('message')
+
+#         subject = f"New Contact Form Submission from {name}"
+#         full_message = f"""
+#         Name: {name}
+#         Email: {email}
+#         Phone: {phone}
+#         Message: {message}
+#         """
+
+#         send_mail(
+#             subject,
+#             full_message,
+#             'your_email@gmail.com',  # From email
+#             ['furniflex@gmail.com'],  # To email (or a list of recipients)
+#             fail_silently=False,
+#         )
+
+#         messages.success(request, 'Your message has been sent successfully!')
+#         return redirect('/')  # or render a thank-you page
+
+#     return render(request, 'home.html')
+@login_required
+def upload_profile_picture(request):
+    if request.method == 'POST' and request.FILES.get('profile_image'):
+        profile = request.user.userprofile
+        profile.profile_image = request.FILES['profile_image']
+        profile.save()
+    return redirect('account')  
+
+
+def send_contact_email(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        phone = request.POST.get('phone')
+        message = request.POST.get('message')
+
+        subject = f"New Contact Form Submission from {name}"
+        body = f"""
+        Name: {name}
+        Email: {email}
+        Phone: {phone}
+        Message: {message}
+        """
+
+        send_mail(
+            subject,
+            body,
+            email,  # from email (sender)
+            ['sandhyanepal54@gmail.com'],  # to email (receiver)
+            fail_silently=False,
+        )
+
+        messages.success(request, "Your message has been sent successfully!")
+        return redirect('home')  # or wherever you want to redirect
+
+    return redirect('home')

@@ -17,7 +17,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 60px;
+    padding: 15px 60px;
     background-color: #FAF6F0;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     position: relative;
@@ -167,7 +167,105 @@ nav a {
 
 
 /* HERO SECTION */
-@keyframes fadeSlideIn {
+
+@keyframes fadeSlideWord {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-text.top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 28px;
+    font-weight: 600;
+    padding: 8px 12px;
+    color: #000;
+    border-radius: 6px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Animate each word */
+.hero-text.top-left .word {
+    opacity: 0;
+    animation: fadeSlideWord 0.6s ease-out forwards;
+}
+
+/* Delay each word a little more */
+.hero-text.top-left .word:nth-child(1) {
+    animation-delay: 0.3s;
+}
+
+.hero-text.top-left .word:nth-child(2) {
+    animation-delay: 0.6s;
+}
+
+.hero-text.top-left .word:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+.hero-text.top-left .word:nth-child(4) {
+    animation-delay: 1.2s;
+}
+
+.hero-text.top-left .word:nth-child(5) {
+    animation-delay: 1.5s;
+}
+
+.hero-text.top-left .word:nth-child(6) {
+    animation-delay: 1.8s;
+}
+
+.message-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.message-popup.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.message-popup.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.popup-close {
+    background: none;
+    border: none;
+    float: right;
+    font-size: 18px;
+    cursor: pointer;
+    color: inherit;
+    margin-left: 10px;
+    padding: 0;
+    line-height: 1;
+}
+
+/* @keyframes fadeSlideIn {
     0% {
         opacity: 0;
         transform: translateX(-30px);
@@ -177,9 +275,9 @@ nav a {
         opacity: 1;
         transform: translateX(0);
     }
-}
+} */
 
-.hero-text.top-left {
+/* .hero-text.top-left {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -192,7 +290,7 @@ nav a {
     opacity: 0;
     animation: fadeSlideIn 4s ease-out forwards;
     animation-delay: 0.5s;
-}
+} */
 
 .hero {
     display: flex;
@@ -240,7 +338,7 @@ nav a {
     display: block;
 }
 
-.hero-text.top-left {
+/* .hero-text.top-left {
     position: absolute;
     top: 20px;
     left: 20px;
@@ -248,9 +346,8 @@ nav a {
     font-size: 28px;
     font-weight: 600;
     padding: 8px 12px;
-    /* background: rgba(255, 255, 255, 0.7); */
     border-radius: 6px;
-}
+} */
 
 /* Shop Now Button */
 .shop-btn {
@@ -279,7 +376,7 @@ nav a {
 
 
 .shop-btn:hover {
-    background-color: #d87f35;
+    background-color: #F89B54;
     color: #000;
     /* Text color on hover */
 
@@ -571,7 +668,7 @@ nav a {
 .rating .star {
     cursor: pointer;
     font-size: 18px;
-    color: #ccc;
+    color: #FAB037;
     transition: color 0.2s ease;
 }
 
@@ -1102,7 +1199,7 @@ nav a {
     gap: 8px;
     user-select: none;
     transition: background-color 0.3s ease;
-    margin-top: 60px;
+    margin-top: 30px;
 
 }
 

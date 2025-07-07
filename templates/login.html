@@ -56,6 +56,16 @@
             padding: 0;
             line-height: 1;
         }
+
+        .error-message {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 4px;
+            margin-left: 0;
+            text-align: left;
+            width: 100%;
+            display: none;
+        }
     </style>
 </head>
 
@@ -81,10 +91,13 @@
 
             <p class="form-subtitle">Welcome back! Please login to your account.</p>
 
-            <form method="POST" id="loginForm">
+            <form method="POST" id="loginForm" novalidate>
                 {% csrf_token %}
                 <input type="email" placeholder="Email" name="email" required />
+                <span class="error-message" id="error-email"></span>
+
                 <input type="password" placeholder="Password" name="password" required />
+                <span class="error-message" id="error-password"></span>
 
                 <div class="form-actions">
                     <button type="submit">Log In</button>
@@ -100,6 +113,39 @@
 
     <!-- Popup JS -->
     <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            const email = this.querySelector('input[name="email"]');
+            const password = this.querySelector('input[name="password"]');
+
+            let isValid = true;
+
+            // Reset all error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+            // Email Validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.value.trim() === '') {
+                document.getElementById('error-email').innerText = 'Email is required';
+                document.getElementById('error-email').style.display = 'block';
+                isValid = false;
+            } else if (!emailPattern.test(email.value)) {
+                document.getElementById('error-email').innerText = 'Invalid email format';
+                document.getElementById('error-email').style.display = 'block';
+                isValid = false;
+            }
+
+            // Password Validation
+            if (password.value.trim() === '') {
+                document.getElementById('error-password').innerText = 'Password is required';
+                document.getElementById('error-password').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                showPopupMessage("Please fix the errors and try again.", "error");
+            }
+        });
         function showPopupMessage(message, type, callback = null) {
             const existingPopup = document.querySelector('.message-popup');
             if (existingPopup) existingPopup.remove();

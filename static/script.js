@@ -89,3 +89,5 @@ document.addEventListener('click', (event) => {
         categoryMenu.style.display = 'none';
     }
 });
+
+

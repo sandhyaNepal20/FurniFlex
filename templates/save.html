@@ -146,12 +146,13 @@
 
                 <div class="button-group">
                     <a href="{% url 'customize' product.id %}" title="Customize">
-                        <button><img src="{% static 'images/wishlist.png' %}" alt="Customize" width="16"></button>
+                        <button><img src="{% static 'images/edit.png' %}" alt="Customize" width="16"></button>
                     </a>
-                    <button title="Add to Cart">
-                        <img src="{% static 'images/cart.png' %}" alt="Cart" width="16">
-
-                    </button>
+                    <a href="{% url 'cart' %}" title="Go to Cart">
+                        <button>
+                            <img src="{% static 'images/cartt.png' %}" alt="Cart" width="16">
+                        </button>
+                    </a>
                 </div>
             </div>
             {% empty %}

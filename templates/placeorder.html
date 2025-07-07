@@ -8,44 +8,83 @@
     <title>Place Order - FurniFlex</title>
 
     <link rel="stylesheet" href="{% static 'css/placeorder.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/payment.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/customize.css' %}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 
+
 <body>
 
     {% include 'navbar.html' %}
-
     <section class="placeorder-container">
-        <!-- LEFT SIDE IMAGE -->
-        <div class="order-left">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="main-image-container">
+            <button class="main-nav-arrow main-arrow-left" disabled>&#8592;</button>
+            <div class="main-image">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainProductImage">
+            </div>
+            <button class="main-nav-arrow main-arrow-right" disabled>&#8594;</button>
         </div>
+
+
 
         <!-- RIGHT SIDE -->
         <div class="order-right">
-            <!-- Add Address Button -->
-            <div class="order-top">
-                <button class="address-btn">Add Address +</button>
-            </div>
-
-            <!-- Quantity and Price -->
-            <div class="order-info">
-                <div class="info-row">
-                    <label class="label">Quantity</label>
-                    <select class="quantity-select" disabled>
-                        <option>{{ quantity }}</option>
-                    </select>
-                </div>
-                <div class="info-row">
-                    <label class="label">Price</label>
-                    <p style="font-size: 15px;">Rs.{{ product.price }}</p>
-                </div>
-            </div>
-
             <!-- Cart Summary -->
             <div class="cart-summary">
+                <!-- Add Address Button -->
+                <!-- Add Address Button -->
+                <div class="order-top">
+                    <button class="address-btn" onclick="openAddressModal()">Add Address +</button>
+                </div>
+
+                <!-- Address Modal -->
+                <div id="addressModal" class="modal">
+                    <div class="modal-content">
+                        <h3>Add Delivery Address</h3>
+
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+
+                        <label>Phone Number</label>
+                        <input type="text" id="phoneNumber" placeholder="Enter your phone number" required>
+
+                        <label>City</label>
+                        <input type="text" id="city" placeholder="Enter your city" required>
+
+                        <label>Full Address</label>
+                        <textarea id="address" placeholder="Enter full address" required></textarea>
+
+                        <div class="modal-buttons">
+                            <button onclick="saveAddress()">Save</button>
+                            <button onclick="closeAddressModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Display Saved Address -->
+                <div class="saved-address" id="savedAddress" style="display: none;">
+                    <h4>Delivery Address</h4>
+                    <p id="displayFullName"></p>
+                    <p id="displayPhone"></p>
+                    <p id="displayCity"></p>
+                    <p id="displayAddress"></p>
+                </div>
+
+                <!-- Quantity and Price -->
+                <div class="order-info">
+                    <div class="info-row">
+                        <label class="label">Quantity</label>
+                        <select class="quantity-select" disabled>
+                            <option>{{ quantity }}</option>
+                        </select>
+                    </div>
+                    <div class="info-row">
+                        <label class="label">Price</label>
+                        <p style="font-size: 15px;">Rs.{{ product.price }}</p>
+                    </div>
+                </div>
+
                 <h3>Cart Total</h3>
                 <div class="summary-row">
                     <span>Subtotal:</span>
@@ -119,8 +158,8 @@
 
             <div class="payment-options-box">
                 <div class="option">
-                    <img src="{% static 'images/wallet.png' %}" alt="Wallet">
-                    <span>Wallet</span>
+                    <img src="{% static 'images/khalti.png' %}" alt="Wallet">
+                    <span>khalti</span>
                     <span class="arrow">&#x276F;</span>
                 </div>
                 <div class="option">
@@ -134,6 +173,34 @@
                     <span class="arrow">&#x276F;</span>
                 </div>
             </div>
+        </div>
+    </div>
+    <!-- COD Confirmation Modal -->
+    <div id="codModal" class="cod-modal">
+        <div class="cod-modal-content">
+            <span class="cod-icon">😒</span>
+            <h3>Are you sure you want to confirm your order?</h3>
+            <p class="cod-note">.</p>
+            <div class="cod-buttons">
+                <button onclick="closeCODModal()" class="decline-btn">Decline</button>
+                <button onclick="confirmCOD()" class="confirm-btn">confirm</button>
+            </div>
+            <span class="cod-close" onclick="closeCODModal()">&times;</span>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div id="successModal" class="cod-modal">
+        <div class="cod-modal-content">
+            <div
+                style="font-size: 48px; background: #fff2cc; width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                🎉
+            </div>
+            <h3 style="margin-top: 20px;">Your order has been placed!</h3>
+            <div class="cod-buttons" style="justify-content: center; margin-top: 20px;">
+                <button onclick="closeSuccessModal()" class="confirm-btn">Thanks!</button>
+            </div>
+            <span class="cod-close" onclick="closeSuccessModal()">&times;</span>
         </div>
     </div>
 
@@ -155,6 +222,73 @@
                 modal.style.display = 'none';
             }
         }
+
+        const addressModal = document.getElementById('addressModal');
+
+        function openAddressModal() {
+            addressModal.style.display = 'flex';
+        }
+
+        function closeAddressModal() {
+            addressModal.style.display = 'none';
+        }
+
+        function saveAddress() {
+            const fullName = document.getElementById('fullName').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const city = document.getElementById('city').value;
+            const address = document.getElementById('address').value;
+
+            if (!fullName || !phoneNumber || !city || !address) {
+                alert("Please fill all address fields.");
+                return;
+            }
+
+            document.getElementById('displayFullName').textContent = `Name: ${fullName}`;
+            document.getElementById('displayPhone').textContent = `Phone: ${phoneNumber}`;
+            document.getElementById('displayCity').textContent = `City: ${city}`;
+            document.getElementById('displayAddress').textContent = `Address: ${address}`;
+
+            addressModal.style.display = 'none';
+            document.getElementById('savedAddress').style.display = 'block';
+        }
+
+        // Close the modal when clicking outside the content
+        window.onclick = function (event) {
+            if (event.target === addressModal) {
+                addressModal.style.display = 'none';
+            }
+        }
+
+        // Close modals on outside click
+        window.onclick = function (event) {
+            if (event.target === modal) modal.style.display = 'none';
+            if (event.target === addressModal) addressModal.style.display = 'none';
+            if (event.target === codModal) codModal.style.display = 'none';
+        }
+
+        // Show COD modal when Cash on Delivery is clicked (3rd .option in list)
+        document.querySelectorAll('.payment-options-box .option')[2].addEventListener('click', () => {
+            codModal.style.display = 'flex';
+        });
+
+        function closeCODModal() {
+            codModal.style.display = 'none';
+        }
+
+        function confirmCOD() {
+            codModal.style.display = 'none';
+            alert("Order Confirmed with Cash on Delivery!");
+        }
+
+        function confirmCOD() {
+            codModal.style.display = 'none';
+            document.getElementById('successModal').style.display = 'flex';
+        }
+        function closeSuccessModal() {
+            document.getElementById('successModal').style.display = 'none';
+        }
+
     </script>
 
 </body>

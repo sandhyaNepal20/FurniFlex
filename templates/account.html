@@ -21,17 +21,37 @@
         <div class="banner-bg"></div>
 
         <div class="profile-centered">
-            <div class="profile-image-container">
-                <img src="{% static 'images/profle.jpg' %}" alt="Profile" class="profile-img" />
-                <div class="camera-icon">
-                    <img src="{% static 'images/profileicon.png' %}" alt="Camera Icon" />
-                </div>
-            </div>
+            <form method="POST" action="{% url 'upload_profile_picture' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="profile-image-container">
+                    <!-- Show uploaded image only if it's NOT the default one -->
+                    <img src="{% if user.is_authenticated and user.userprofile.profile_image and user.userprofile.profile_image.name != 'profile_images/default.jpg' %}
+                        {{ user.userprofile.profile_image.url }}
+                     {% else %}
+                        {% static 'images/profile.png' %}
+                     {% endif %}" alt="Profile" class="profile-img" id="preview-img" />
 
-            <div class="profile-text">
-                <h2>{{ name }}</h2>
-                <p>{{ email }}</p>
-            </div>
+                    <!-- Hidden file input -->
+                    <input type="file" name="profile_image" id="profile-image-input" accept="image/*"
+                        style="display: none;" onchange="this.form.submit()" />
+
+                    <!-- Camera icon only for logged in users -->
+                    {% if user.is_authenticated %}
+                    <div class="camera-icon" onclick="document.getElementById('profile-image-input').click();">
+                        <img src="{% static 'images/profileicon.png' %}" alt="Camera Icon" />
+                    </div>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+
+
+        </div>
+
+        <div class="profile-text">
+            <h2>{{ name }}</h2>
+            <p>{{ email }}</p>
+        </div>
         </div>
         </form>
 
@@ -58,110 +78,7 @@
         </div>
     </section>
 
-    <!-- Divider -->
-    <hr class="section-divider" />
 
-    <!-- Products Section -->
-    <section id="products" class="products-section">
-        <div class="products-header">
-            <h2>Best Sellers</h2>
-        </div>
-
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="S-Series Comfort Chair" />
-                <h4>S-Series Comfort Chair</h4>
-                <p class="price">Rs.7375</p>
-                <div class="rating" data-selected="0">
-                    <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                    <span class="star">★</span><span class="star">★</span><span class="review-count">(50 Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="BACKSALEN" />
-                <h4>BACKSALEN</h4>
-                <p class="price">Rs.65000</p>
-                <div class="rating">
-                    <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                    <span class="star">★</span><span class="star">★</span><span class="review-count">(100
-                        Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <div class="rating">
-                    <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                    <span class="star">★</span><span class="star">★</span><span class="review-count">(500
-                        Reviews)</span>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Small BookShelf" />
-                <h4>Small BookShelf</h4>
-                <p class="price">Rs.18060</p>
-                <div class="rating">
-                    <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                    <span class="star">★</span><span class="star">★</span><span class="review-count">(15 Reviews)</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section id="about" class="about-section">
-        <h2>About Us</h2>
-        <div class="about-container">
-            <div class="about-image">
-                <img class="responsive-img" src="{% static 'images/cover.jpeg' %}" alt="Modern Living Room" />
-            </div>
-            <div class="about-content">
-                <h3>Affordable furniture for every home</h3>
-                <p>FurniFlex is a digital platform to help you plan, visualize, and customize furniture for your home.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Us Section -->
-    <section id="contact" class="contact-section">
-        <h2>Contact Us</h2>
-        <div class="contact-wrapper">
-            <div class="contact-info">
-                <div class="info-block">
-                    <img class="responsive-img-small" src="{% static 'images/call.png' %}" alt="Call Icon" />
-                    <div>
-                        <h4>Call To Us</h4>
-                        <p>We are available 24/7, 7 days a week.</p>
-                        <p>Phone: +977 9768467330</p>
-                    </div>
-                </div>
-                <hr />
-                <div class="info-block">
-                    <img class="responsive-img-small" src="{% static 'images/msg.png' %}" alt="Mail Icon" />
-                    <div>
-                        <h4>Write To Us</h4>
-                        <p>Emails: customer@gmail.com</p>
-                        <p>Emails: furniflex@gmail.com</p>
-                    </div>
-                </div>
-            </div>
-
-            <form class="contact-form">
-                <div class="form-row">
-                    <input type="text" placeholder="Your Name *" required />
-                    <input type="email" placeholder="Your Email *" required />
-                    <input type="tel" placeholder="Your Phone *" required />
-                </div>
-                <textarea placeholder="Your Message" rows="5" required></textarea>
-                <button type="submit">Send Message</button>
-            </form>
-        </div>
-    </section>
 
     {% include 'footer.html' %}
 </body>

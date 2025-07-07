@@ -69,6 +69,16 @@
             padding: 0;
             line-height: 1;
         }
+
+        .error-message {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 4px;
+            margin-left: 0;
+            display: none;
+            text-align: left;
+            width: 100%;
+        }
     </style>
 </head>
 
@@ -96,13 +106,23 @@
 
             <form method="POST" id="registerForm" novalidate>
                 {% csrf_token %}
-                <input type="text" name="name" placeholder="Full Name" required autofocus autocomplete="name" />
+                <input type="text" name="name" placeholder="Full Name" required autocomplete="name" />
+                <span class="error-message" id="error-name"></span>
+
                 <input type="email" name="email" placeholder="Email Address" required autocomplete="email" />
+                <span class="error-message" id="error-email"></span>
+
                 <input type="tel" name="phone" placeholder="Phone Number" required autocomplete="tel"
                     pattern="[0-9]{10,15}" title="Enter valid phone number" />
+                <span class="error-message" id="error-phone"></span>
+
                 <input type="password" name="password" placeholder="Password" required autocomplete="new-password" />
+                <span class="error-message" id="error-password"></span>
+
                 <input type="password" name="confirm_password" placeholder="Confirm Password" required
                     autocomplete="new-password" />
+                <span class="error-message" id="error-confirm"></span>
+
                 <button type="submit" class="btn-submit">Create Account</button>
             </form>
 
@@ -114,6 +134,77 @@
 
     <!-- Message Popup Script -->
     <script>
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            const name = this.querySelector('input[name="name"]');
+            const email = this.querySelector('input[name="email"]');
+            const phone = this.querySelector('input[name="phone"]');
+            const password = this.querySelector('input[name="password"]');
+            const confirm = this.querySelector('input[name="confirm_password"]');
+
+            let isValid = true;
+
+            // Clear all error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+            // Name
+            if (name.value.trim() === '') {
+                document.getElementById('error-name').innerText = 'Full Name is required';
+                document.getElementById('error-name').style.display = 'block';
+                isValid = false;
+            }
+
+            // Email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.value.trim() === '') {
+                document.getElementById('error-email').innerText = 'Email is required';
+                document.getElementById('error-email').style.display = 'block';
+                isValid = false;
+            } else if (!emailPattern.test(email.value)) {
+                document.getElementById('error-email').innerText = 'Invalid email format';
+                document.getElementById('error-email').style.display = 'block';
+                isValid = false;
+            }
+
+            // Phone
+            const phonePattern = /^[0-9]{10,15}$/;
+            if (phone.value.trim() === '') {
+                document.getElementById('error-phone').innerText = 'Phone number is required';
+                document.getElementById('error-phone').style.display = 'block';
+                isValid = false;
+            } else if (!phonePattern.test(phone.value)) {
+                document.getElementById('error-phone').innerText = 'Enter valid phone number (10-15 digits)';
+                document.getElementById('error-phone').style.display = 'block';
+                isValid = false;
+            }
+
+            // Password
+            if (password.value.trim() === '') {
+                document.getElementById('error-password').innerText = 'Password is required';
+                document.getElementById('error-password').style.display = 'block';
+                isValid = false;
+            } else if (password.value.length < 6) {
+                document.getElementById('error-password').innerText = 'Password must be at least 6 characters';
+                document.getElementById('error-password').style.display = 'block';
+                isValid = false;
+            }
+
+            // Confirm Password
+            if (confirm.value.trim() === '') {
+                document.getElementById('error-confirm').innerText = 'Please confirm your password';
+                document.getElementById('error-confirm').style.display = 'block';
+                isValid = false;
+            } else if (password.value !== confirm.value) {
+                document.getElementById('error-confirm').innerText = 'Passwords do not match';
+                document.getElementById('error-confirm').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                showPopupMessage("Please fix the errors and try again.", "error");
+            }
+        });
+
         function showPopupMessage(message, type) {
             const existingPopup = document.querySelector('.message-popup');
             if (existingPopup) {
