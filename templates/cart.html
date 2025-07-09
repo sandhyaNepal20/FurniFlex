@@ -29,54 +29,16 @@
 
     <hr class="section-divider" />
 
-    <!-- 📦 Product Section
-    <section class="products-section">
-        <div class="products-header">
-            <h2>Best Sellers</h2>
-        </div>
-
-        <div class="product-grid">
-            <div class="product-card">
-                <img src="{% static 'images/chair.png' %}" alt="Chair" />
-                <h4>Chair</h4>
-                <p class="price">Rs.10000</p>
-                <button class="add-to-cart-btn" data-id="1" data-name="Chair" data-price="10000"
-                    data-img="{% static 'images/chair.png' %}">
-                    Add to Cart
-                </button>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/sofa.png' %}" alt="Sofa" />
-                <h4>Sofa</h4>
-                <p class="price">Rs.65000</p>
-                <button class="add-to-cart-btn" data-id="2" data-name="Sofa" data-price="65000"
-                    data-img="{% static 'images/sofa.png' %}">
-                    Add to Cart
-                </button>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/b.png' %}" alt="Bed" />
-                <h4>Bed</h4>
-                <p class="price">Rs.80360</p>
-                <button class="add-to-cart-btn" data-id="3" data-name="Bed" data-price="80360"
-                    data-img="{% static 'images/b.png' %}">
-                    Add to Cart
-                </button>
-            </div>
-
-            <div class="product-card">
-                <img src="{% static 'images/w.png' %}" alt="Bookshelf" />
-                <h4>Small Bookshelf</h4>
-                <p class="price">Rs.18060</p>
-                <button class="add-to-cart-btn" data-id="4" data-name="Bookshelf" data-price="18060"
-                    data-img="{% static 'images/w.png' %}">
-                    Add to Cart
-                </button>
+    <!-- Custom Delete Confirmation Popup -->
+    <div id="delete-confirm-popup" class="confirm-popup hidden">
+        <div class="popup-content">
+            <p>Are you sure you want to delete all the products in the cart?</p>
+            <div class="popup-actions">
+                <button id="confirm-yes">Yes</button>
+                <button id="confirm-no">No</button>
             </div>
         </div>
-    </section> -->
+    </div>
 
     {% include 'footer.html' %}
 
@@ -134,7 +96,9 @@
                         </div>
                         <div class="price" id="price-${item.id}">Rs ${item.price * item.quantity}</div>
                         <div class="remove-icon">
-                            <button onclick="removeFromCart('${item.id}')">🗑️</button>
+<button onclick="removeFromCart('${item.id}')" class="delete-btn">
+    <img src="{% static 'images/delete.png' %}" alt="Delete" />
+</button>
                         </div>
                     </div>
                 `;
@@ -168,14 +132,27 @@
                 renderCart();
             }
 
-            // Clear All
             window.clearCart = function () {
-                if (confirm("Are you sure you want to clear the cart?")) {
+                const popup = document.getElementById('delete-confirm-popup');
+                popup.classList.remove('hidden');
+
+                const yesBtn = document.getElementById('confirm-yes');
+                const noBtn = document.getElementById('confirm-no');
+
+                yesBtn.onclick = () => {
                     localStorage.removeItem('cart');
                     renderCart();
-                }
-            }
+                    popup.classList.add('hidden');
+                };
+
+                noBtn.onclick = () => {
+                    popup.classList.add('hidden');
+                };
+            };
+
         });
+
+
     </script>
 
 </body>

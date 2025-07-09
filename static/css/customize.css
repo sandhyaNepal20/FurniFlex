@@ -163,7 +163,7 @@ body {
 
 /* Add to Cart button */
 .add-cart {
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
     border: 1px solid #000;
     padding: 10px 20px;
@@ -176,11 +176,13 @@ body {
 
 .add-cart:hover {
     background-color: #d87f35;
+    transform: scale(1.1);
+
 }
 
 /* Buy Now button */
 .buy-now {
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
     border: 1px solid #000;
     padding: 10px 20px;
@@ -193,10 +195,13 @@ body {
     /* ✅ Remove underline */
     display: inline-block;
     /* ✅ Makes it behave like a button */
+
 }
 
 .buy-now:hover {
     background-color: #d87f35;
+    transform: scale(1.1);
+
 }
 
 

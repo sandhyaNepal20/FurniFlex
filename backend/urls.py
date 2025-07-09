@@ -30,6 +30,8 @@ urlpatterns = [
                                                     # path('contact/', views.contact_view, name='contact'),
                                                         path('upload-profile-picture/', views.upload_profile_picture, name='upload_profile_picture'),
                                                             path('send-contact-email/', views.send_contact_email, name='send_contact_email'),
+                                                                path('save-payment/', views.save_payment_details, name='save_payment'),
+
 
 
                                                     

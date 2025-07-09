@@ -11,12 +11,15 @@
     <link rel="stylesheet" href="{% static 'css/customize.css' %}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-</head>
 
+    <!-- Khalti Checkout JS -->
+    <script src="https://khalti.com/static/khalti-checkout.js"></script>
+</head>
 
 <body>
 
     {% include 'navbar.html' %}
+
     <section class="placeorder-container">
         <div class="main-image-container">
             <button class="main-nav-arrow main-arrow-left" disabled>&#8592;</button>
@@ -26,14 +29,9 @@
             <button class="main-nav-arrow main-arrow-right" disabled>&#8594;</button>
         </div>
 
-
-
         <!-- RIGHT SIDE -->
         <div class="order-right">
-            <!-- Cart Summary -->
             <div class="cart-summary">
-                <!-- Add Address Button -->
-                <!-- Add Address Button -->
                 <div class="order-top">
                     <button class="address-btn" onclick="openAddressModal()">Add Address +</button>
                 </div>
@@ -71,7 +69,6 @@
                     <p id="displayAddress"></p>
                 </div>
 
-                <!-- Quantity and Price -->
                 <div class="order-info">
                     <div class="info-row">
                         <label class="label">Quantity</label>
@@ -99,6 +96,8 @@
                     <span>Total:</span>
                     <span>Rs {{ total_price }}</span>
                 </div>
+
+                <!-- Place order button triggers payment modal -->
                 <button class="place-order-btn">Place order</button>
             </div>
         </div>
@@ -110,28 +109,25 @@
     </div>
 
     <!-- Payment Modal -->
-    <div id="paymentModal" class="payment-modal">
+    <div id="paymentModal" class="payment-modal" style="display:none;">
         <div class="payment-content">
-            <!-- Location -->
             <div class="location-row">
-                <img src="{% static 'images/location.png' %}" alt="Location">
-                <span>Saraswotinagar, Chabahil</span>
+                <img src="{% static 'images/location.png' %}" alt="Location" />
+                <span id="payment-address">[No address selected]</span>
             </div>
 
-            <!-- Total Amount -->
             <div class="amount-row">
                 <strong>Total Amount</strong>
                 <span class="amount">Rs {{ total_price }}</span>
             </div>
 
-            <hr>
+            <hr />
 
-            <!-- Credit & Debit Cards -->
             <h3>Credit & Debit Cards</h3>
 
             <label class="card-item">
                 <div class="card-left">
-                    <img src="{% static 'images/mastercard.png' %}" alt="Mastercard">
+                    <img src="{% static 'images/mastercard.png' %}" alt="Mastercard" />
                     <span>Axis Bank <b>**** **** **** 8395</b></span>
                 </div>
                 <input type="radio" name="card" />
@@ -140,57 +136,59 @@
 
             <label class="card-item">
                 <div class="card-left">
-                    <img src="{% static 'images/visa.png' %}" alt="Visa">
+                    <img src="{% static 'images/visa.png' %}" alt="Visa" />
                     <span>HDFC Bank <b>**** **** **** 6246</b></span>
                 </div>
                 <input type="radio" name="card" />
                 <span class="custom-radio"></span>
             </label>
 
-            <!-- Add Card -->
             <div class="add-card">
                 <span class="plus-box">+</span>
                 <span>Add New Card</span>
             </div>
 
-            <!-- More Payment Options -->
             <h3>More Payment Options</h3>
 
             <div class="payment-options-box">
-                <div class="option">
-                    <img src="{% static 'images/khalti.png' %}" alt="Wallet">
-                    <span>khalti</span>
+                <div class="option" id="khalti-option">
+                    <img src="{% static 'images/khalti.png' %}" alt="Khalti Wallet" />
+                    <span>Khalti</span>
                     <span class="arrow">&#x276F;</span>
                 </div>
                 <div class="option">
-                    <img src="{% static 'images/bank.png' %}" alt="Bank">
+                    <img src="{% static 'images/bank.png' %}" alt="Bank" />
                     <span>Net Banking</span>
                     <span class="arrow">&#x276F;</span>
                 </div>
-                <div class="option">
-                    <img src="{% static 'images/cash.png' %}" alt="Cash">
+                <div class="option" id="cod-option">
+                    <img src="{% static 'images/cash.png' %}" alt="Cash" />
                     <span>Cash on Delivery</span>
                     <span class="arrow">&#x276F;</span>
                 </div>
             </div>
+
+            <!-- Khalti payment button (hidden, triggered by clicking Khalti option) -->
+            <button id="khalti-button" style="display:none;">Pay with Khalti</button>
         </div>
     </div>
+
     <!-- COD Confirmation Modal -->
-    <div id="codModal" class="cod-modal">
+    <div id="codModal" class="cod-modal" style="display:none;">
         <div class="cod-modal-content">
             <span class="cod-icon">😒</span>
             <h3>Are you sure you want to confirm your order?</h3>
             <p class="cod-note">.</p>
             <div class="cod-buttons">
                 <button onclick="closeCODModal()" class="decline-btn">Decline</button>
-                <button onclick="confirmCOD()" class="confirm-btn">confirm</button>
+                <button onclick="confirmCOD()" class="confirm-btn">Confirm</button>
             </div>
             <span class="cod-close" onclick="closeCODModal()">&times;</span>
         </div>
     </div>
 
     <!-- Order Success Modal -->
-    <div id="successModal" class="cod-modal">
+    <div id="successModal" class="cod-modal" style="display:none;">
         <div class="cod-modal-content">
             <div
                 style="font-size: 48px; background: #fff2cc; width: 80px; height: 80px; margin: 0 auto; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
@@ -207,23 +205,18 @@
     {% include 'footer.html' %}
 
     <script>
-        const modal = document.getElementById('paymentModal');
+        const paymentModal = document.getElementById('paymentModal');
+        const addressModal = document.getElementById('addressModal');
+        const codModal = document.getElementById('codModal');
+        const successModal = document.getElementById('successModal');
 
         document.querySelector('.place-order-btn').addEventListener('click', () => {
-            modal.style.display = 'flex';
+            paymentModal.style.display = 'flex';
         });
 
         function closePaymentModal() {
-            modal.style.display = 'none';
+            paymentModal.style.display = 'none';
         }
-
-        window.onclick = function (event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        const addressModal = document.getElementById('addressModal');
 
         function openAddressModal() {
             addressModal.style.display = 'flex';
@@ -248,29 +241,11 @@
             document.getElementById('displayPhone').textContent = `Phone: ${phoneNumber}`;
             document.getElementById('displayCity').textContent = `City: ${city}`;
             document.getElementById('displayAddress').textContent = `Address: ${address}`;
+            document.getElementById('payment-address').textContent = `${address}, ${city}`;
 
-            addressModal.style.display = 'none';
+            closeAddressModal();
             document.getElementById('savedAddress').style.display = 'block';
         }
-
-        // Close the modal when clicking outside the content
-        window.onclick = function (event) {
-            if (event.target === addressModal) {
-                addressModal.style.display = 'none';
-            }
-        }
-
-        // Close modals on outside click
-        window.onclick = function (event) {
-            if (event.target === modal) modal.style.display = 'none';
-            if (event.target === addressModal) addressModal.style.display = 'none';
-            if (event.target === codModal) codModal.style.display = 'none';
-        }
-
-        // Show COD modal when Cash on Delivery is clicked (3rd .option in list)
-        document.querySelectorAll('.payment-options-box .option')[2].addEventListener('click', () => {
-            codModal.style.display = 'flex';
-        });
 
         function closeCODModal() {
             codModal.style.display = 'none';
@@ -278,17 +253,111 @@
 
         function confirmCOD() {
             codModal.style.display = 'none';
-            alert("Order Confirmed with Cash on Delivery!");
+            paymentModal.style.display = 'none';
+            successModal.style.display = 'flex';
         }
 
-        function confirmCOD() {
-            codModal.style.display = 'none';
-            document.getElementById('successModal').style.display = 'flex';
-        }
         function closeSuccessModal() {
-            document.getElementById('successModal').style.display = 'none';
+            successModal.style.display = 'none';
         }
 
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target === paymentModal) closePaymentModal();
+            else if (event.target === addressModal) closeAddressModal();
+            else if (event.target === codModal) closeCODModal();
+            else if (event.target === successModal) closeSuccessModal();
+        };
+
+        // COD click opens COD modal
+        document.getElementById('cod-option').addEventListener('click', () => {
+            codModal.style.display = 'flex';
+        });
+
+        // Khalti config
+        var khaltiConfig = {
+            publicKey: "test_public_key_XXXXXXXXXXXXXXXXXXXX", // Replace with your actual Khalti key
+            productIdentity: "{{ product.id }}",
+            productName: "{{ product.name|escapejs }}",
+            productUrl: window.location.href,
+            eventHandler: {
+                onSuccess(payload) {
+                    console.log('Khalti Payment Success:', payload);
+
+                    // Get address input fields
+                    const fullName = document.getElementById('fullName').value;
+                    const phoneNumber = document.getElementById('phoneNumber').value;
+                    const city = document.getElementById('city').value;
+                    const address = document.getElementById('address').value;
+
+                    if (!fullName || !phoneNumber || !city || !address) {
+                        alert("Please enter address before paying.");
+                        return;
+                    }
+
+                    // Send data to backend
+                    fetch('/save-payment/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')
+                        },
+                        body: JSON.stringify({
+                            token: payload.token,
+                            amount: payload.amount,
+                            full_name: fullName,
+                            phone: phoneNumber,
+                            city: city,
+                            address: address,
+                            product_id: "{{ product.id }}"
+                        })
+                    }).then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                paymentModal.style.display = 'none';
+                                successModal.style.display = 'flex';
+                            } else {
+                                alert('Could not save payment info.');
+                            }
+                        }).catch(err => {
+                            alert('Error saving payment info.');
+                            console.error(err);
+                        });
+                },
+                onError(error) {
+                    console.log('Khalti Payment Failed:', error);
+                    alert('Payment Failed! ' + error.message);
+                },
+                onClose() {
+                    console.log('Khalti widget closed');
+                }
+            },
+            paymentPreference: ["KHALTI", "EBANKING", "MOBILE_BANKING", "CONNECT_IPS", "SCT"]
+        };
+
+        var checkout = new KhaltiCheckout(khaltiConfig);
+
+        // Open Khalti checkout
+        document.getElementById('khalti-option').addEventListener('click', () => {
+            let amountPaisa = Math.round(parseFloat('{{ total_price }}') * 100);
+            checkout.show({ amount: amountPaisa });
+        });
+
+        // CSRF Token for Django
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
     </script>
 
 </body>

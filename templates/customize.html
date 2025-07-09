@@ -270,6 +270,64 @@
             opacity: 1;
             pointer-events: auto;
         }
+
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 14px 20px 14px 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            font-family: 'Poppins', sans-serif;
+            color: #1e1e1e;
+            z-index: 1000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.4s ease;
+            min-width: 280px;
+            max-width: 360px;
+        }
+
+        .message-popup.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .message-popup .icon {
+            width: 28px;
+            height: 28px;
+            margin-right: 12px;
+            background-color: #d4edda;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .message-popup .icon svg {
+            width: 18px;
+            height: 18px;
+            stroke: #28a745;
+        }
+
+        .message-popup .message-text {
+            flex: 1;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .message-popup .popup-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            margin-left: 10px;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+        }
     </style>
 
 </head>
@@ -371,7 +429,7 @@
 
                 <!-- Buttons -->
                 <div class="button-row" style="margin-top: 20px;">
-                    <form method="POST" action="{% url 'add_to_save' %}" style="display:inline;">
+                    <form id="wishlistForm" method="POST" action="{% url 'add_to_save' %}" style="display:inline;">
                         {% csrf_token %}
                         <input type="hidden" name="product_id" value="{{ product.id }}">
                         <button type="submit" class="wishlist" aria-label="Add to wishlist">♡</button>
@@ -445,7 +503,7 @@
                     }
 
                     localStorage.setItem('cart', JSON.stringify(cart));
-                    alert(`${name} added to cart (${quantity})`);
+                    showPopupMessage("Cart added successfully!", "success");
                 });
             }
 
@@ -595,6 +653,65 @@
             // On window resize recalc thumbnails arrows
             window.addEventListener('resize', updateThumbnailArrowStates);
         });
+        function showPopupMessage(message, type, callback = null) {
+            const existingPopup = document.querySelector('.message-popup');
+            if (existingPopup) existingPopup.remove();
+
+            const popup = document.createElement('div');
+            popup.className = `message-popup ${type}`;
+            popup.innerHTML = `
+        <div class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 6L9 17l-5-5" />
+            </svg>
+        </div>
+        <div class="message-text">${message}</div>
+        <button class="popup-close" onclick="closePopup(this)">&times;</button>
+    `;
+
+            document.body.appendChild(popup);
+            setTimeout(() => popup.classList.add('show'), 100);
+
+            setTimeout(() => {
+                closePopup(popup.querySelector('.popup-close'));
+                if (callback) callback();
+            }, 3000);
+        }
+
+        function closePopup(closeBtn) {
+            const popup = closeBtn.parentElement;
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }
+
+        const wishlistForm = document.getElementById('wishlistForm');
+
+        if (wishlistForm) {
+            wishlistForm.addEventListener('submit', function (e) {
+                e.preventDefault(); // Prevent page reload
+
+                const formData = new FormData(wishlistForm);
+                fetch(wishlistForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                    },
+                    body: formData,
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            showPopupMessage("Product saved successfully!", "success");
+                        } else {
+                            showPopupMessage("Failed to save product.", "error");
+                        }
+                    })
+                    .catch(() => {
+                        showPopupMessage("Something went wrong.", "error");
+                    });
+            });
+        }
+
+
     </script>
 </body>
 

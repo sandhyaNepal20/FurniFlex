@@ -14,6 +14,9 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 import random
 from django.conf import settings
+from .models import Payment  # Make sure you have this model
+from django.views.decorators.csrf import csrf_exempt
+
 
 def home_view(request):
     products = Product.objects.all()[:4]  # Fetch only top 4 for homepage
@@ -163,8 +166,6 @@ def account_view(request):
 @login_required
 def edit_profile_view(request):
     user = request.user
-
-    # Try to get or create the UserProfile
     profile, created = UserProfile.objects.get_or_create(user=user)
 
     if request.method == 'POST':
@@ -177,7 +178,6 @@ def edit_profile_view(request):
         profile.phone = phone
         profile.save()
 
-        # Password change logic
         current_password = request.POST.get('current_password')
         new_password = request.POST.get('new_password')
         confirm_password = request.POST.get('confirm_password')
@@ -195,11 +195,11 @@ def edit_profile_view(request):
             user.save()
             update_session_auth_hash(request, user)
             messages.success(request, "Password updated successfully.")
+        else:
+            messages.success(request, "Profile updated successfully.")
 
-        messages.success(request, "Profile updated successfully.")
-        return redirect('account')
+      
 
-    # Render the form with existing data
     context = {
         'name': user.first_name,
         'email': user.email,
@@ -214,11 +214,10 @@ def searchproduct_view(request):
     categories = Category.objects.all().order_by('name')
     products = Product.objects.all()
 
-    if category_name:
-        products = products.filter(category__name__iexact=category_name)
+  
 
-    if search_query:
-        products = products.filter(name__icontains=search_query)
+    if category_name and category_name.lower() != "all":
+        products = products.filter(category__name__iexact=category_name)
 
     for product in products:
         try:
@@ -380,3 +379,33 @@ def send_contact_email(request):
         return redirect('home')  # or wherever you want to redirect
 
     return redirect('home')
+@csrf_exempt
+def save_payment_details(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        user = request.user
+        product_id = data.get('product_id')
+        product = Product.objects.get(id=product_id)
+
+        full_name = data.get('full_name')
+        phone = data.get('phone')
+        city = data.get('city')
+        address = data.get('address')
+        token = data.get('token')
+        amount = data.get('amount')
+
+        Payment.objects.create(
+            user=user,
+            product=product,
+            full_name=full_name,
+            phone=phone,
+            city=city,
+            address=address,
+            khalti_token=token,
+            amount=amount / 100  # if amount is in paisa
+        )
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'failed'}, status=400)

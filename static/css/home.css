@@ -376,8 +376,9 @@ nav a {
 
 
 .shop-btn:hover {
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
+
     /* Text color on hover */
 
 }
@@ -607,7 +608,7 @@ nav a {
 }
 
 .view-all-btn {
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
     border: 1px solid #000;
     padding: 10px 20px;
@@ -621,6 +622,8 @@ nav a {
 .view-all-btn:hover {
     background-color: #d87f35;
     color: #000;
+    transform: scale(1.1);
+
 }
 
 /* Product Grid */
@@ -863,7 +866,7 @@ nav a {
 }
 
 .contact-form button {
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
     border: 1px solid #000;
     padding: 10px 20px;
@@ -876,8 +879,10 @@ nav a {
 }
 
 .contact-form button:hover {
-    background-color: #FAB037;
+    background-color: #d87f35;
     color: rgb(4, 4, 4);
+    transform: scale(1.1);
+
 }
 
 /* Responsive tweaks */
@@ -1164,21 +1169,22 @@ nav a {
     font-family: 'Poppins', sans-serif;
 }
 
-.search-button {
-    padding: 12px 24px;
-    background-color: #F89B54;
-    color: #000;
-    border: 1px solid #000;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
+.search-bar-top .search-button {
+    background-color: #FAB37D;
+    border: 1px solid #222;
+    padding: 12px 22px;
+    font-weight: 600;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    color: #222;
+    transition: all 0.2s ease;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-.search-button:hover {
+.search-bar-top .search-button:hover {
     background-color: #d87f35;
-    color: #000;
+    transform: scale(1.1);
+
 }
 
 .category-dropdown {
@@ -1188,7 +1194,7 @@ nav a {
 
 .category-button {
     padding: 12px 24px;
-    background-color: #F89B54;
+    background-color: #FAB37D;
     color: #000;
     border: 1px solid #000;
     border-radius: 10px;
@@ -1205,6 +1211,8 @@ nav a {
 
 .category-button:hover {
     background-color: #d87f35;
+    transform: scale(1.1);
+
 }
 
 .category-menu {
@@ -1231,7 +1239,7 @@ nav a {
 }
 
 .category-menu li:hover {
-    background-color: #d87f35;
+    background-color: #FAB37D;
 }
 
 
