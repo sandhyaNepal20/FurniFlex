@@ -201,6 +201,22 @@
             <span class="cod-close" onclick="closeSuccessModal()">&times;</span>
         </div>
     </div>
+    <!-- Review Modal -->
+    <div id="reviewPopup" class="modal review-modal" style="display: none;">
+        <div class="review-modal-content">
+            <h2>Give us a Rating</h2>
+            <div class="stars" id="starContainer">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <button onclick="submitReview()" class="submit-review-btn">Submit Rating</button>
+            <p id="reviewThanks" class="thank-you-text" style="display: none;">Thank you for your rating!</p>
+        </div>
+    </div>
+
 
     {% include 'footer.html' %}
 
@@ -358,6 +374,130 @@
             }
             return cookieValue;
         }
+        function showReviewSection() {
+            document.getElementById('thanksButton').style.display = 'none';
+            document.getElementById('reviewSection').style.display = 'block';
+        }
+
+        // Show review popup after order success
+        function showReviewPopup() {
+            document.getElementById('reviewPopup').style.display = 'flex';
+        }
+
+        // Trigger the popup immediately after success modal
+        function confirmCOD() {
+            codModal.style.display = 'none';
+            paymentModal.style.display = 'none';
+            successModal.style.display = 'flex';
+
+            // Show review popup after 2 seconds
+            setTimeout(() => {
+                successModal.style.display = 'none';
+                showReviewPopup();
+            }, 2000);
+        }
+
+        function showReviewPopup() {
+            document.getElementById('reviewPopup').style.display = 'flex';
+        }
+
+        // Show review modal after successful order
+        function confirmCOD() {
+            codModal.style.display = 'none';
+            paymentModal.style.display = 'none';
+            successModal.style.display = 'flex';
+
+            // Show review popup after delay
+            setTimeout(() => {
+                successModal.style.display = 'none';
+                showReviewPopup();
+            }, 2000);
+        }
+
+        // Star interaction logic
+        const stars = document.querySelectorAll('#starContainer .star');
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                highlightStars(parseInt(star.getAttribute('data-value')));
+            });
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.classList.remove('selected');
+                if (val <= rating) {
+                    star.classList.add('selected');
+                }
+            });
+        }
+
+        function submitReview() {
+            if (selectedRating === 0) {
+                alert("Please select a star rating.");
+                return;
+            }
+
+            document.getElementById('reviewThanks').style.display = 'block';
+
+            // Optional: send rating to Django backend
+            /*
+            fetch('/submit-review/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    rating: selectedRating,
+                    product_id: "{{ product.id }}"
+                })
+            }).then(res => res.json())
+            .then(data => {
+                console.log("Review saved");
+            });
+            */
+        }
+        function submitReview() {
+            if (selectedRating === 0) {
+                alert("Please select a star rating.");
+                return;
+            }
+
+            fetch('/submit-review/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    rating: selectedRating,
+                    product_id: "{{ product.id }}"
+                })
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('reviewThanks').style.display = 'block';
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    alert("Error submitting ratings.");
+                });
+        }
+
+
+
     </script>
 
 </body>

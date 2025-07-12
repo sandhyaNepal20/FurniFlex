@@ -350,7 +350,7 @@
                             <span class="star">☆</span>
                             {% endif %}
                             {% endfor %}
-                            <span class="review-count">({{ product.reviews|default:"0" }} Reviews)</span>
+                            <span class="review-count">({{ product.reviews|default:"0" }} Ratings)</span>
                         </div>
                     </div>
                     {% empty %}
@@ -397,7 +397,7 @@
         searchButton.addEventListener('click', () => {
             const term = searchInput.value.trim();
             if (term) {
-                window.location.href = `/search/?q=${encodeURIComponent(term)}`;
+                window.location.href = `/searchview/?q=${encodeURIComponent(term)}`;
             }
         });
 

@@ -31,6 +31,9 @@ urlpatterns = [
                                                         path('upload-profile-picture/', views.upload_profile_picture, name='upload_profile_picture'),
                                                             path('send-contact-email/', views.send_contact_email, name='send_contact_email'),
                                                                 path('save-payment/', views.save_payment_details, name='save_payment'),
+    path('searchview/', views.search_view, name='search'),
+    path('submit-review/', views.submit_review, name='submit_review'),
+
 
 
 

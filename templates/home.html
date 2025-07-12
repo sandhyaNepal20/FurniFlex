@@ -15,10 +15,74 @@
 </head>
 
 
-<body>
+<body class="light">
 
-    {% include 'navbar.html' %}
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="{% url 'home' %}">
+                <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
+            </a>
+        </div>
 
+        <div class="hamburger" id="hamburger">&#9776;</div>
+
+        <nav id="nav-menu" class="nav-menu">
+            <a href="{% url 'home' %}" class="nav-link active">Home</a>
+            <a href="#products" class="nav-link">Products</a>
+            <a href="#about" class="nav-link">About Us</a>
+            <a href="#contact" class="nav-link">Contact Us</a>
+
+            {% if request.user.is_authenticated %}
+            <div class="dropdown mobile-only">
+                <button id="mobileAccountDropdownBtn" class="login-btn dropbtn">My Account ▾</button>
+                <div id="mobileAccountDropdownMenu" class="dropdown-content">
+                    <a href="{% url 'account' %}">Profile</a>
+                    <a href="{% url 'logout' %}">Logout <span class="logout-icon">↪️</span></a>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="mobile-only">Login / Sign Up</a>
+                {% endif %}
+
+                <a href="{% url 'wishlist' %}" class="icon-link mobile-only">
+                    <img src="{% static 'images/wishlist.png' %}" alt="Wishlist" class="nav-icon-img" />
+                </a>
+                <a href="{% url 'cart' %}" class="icon-link mobile-only">
+                    <img src="{% static 'images/cart.png' %}" alt="Cart" class="nav-icon-img" />
+                </a>
+
+
+
+        </nav>
+
+
+        <div class="auth-cart desktop-only">
+            {% if request.user.is_authenticated %}
+            <div class="dropdown">
+                <button id="accountDropdownBtn" class="login-btn dropbtn">My Account</button>
+                <div id="accountDropdownMenu" class="dropdown-content">
+                    <a href="{% url 'account' %}">Profile</a>
+                    <a href="{% url 'logout' %}">Logout <span class="logout-icon">↪️</span></a>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'login' %}" class="login-btn">Login / Sign Up</a>
+            {% endif %}
+            <a href="{% url 'save' %}" class="icon-link">
+                <img src="{% static 'images/wishlist.png' %}" alt="Wishlist" class="nav-icon-img" />
+            </a>
+            <a href="{% url 'cart' %}" class="icon-link">
+                <img src="{% static 'images/cart.png' %}" alt="Cart" class="nav-icon-img" />
+            </a>
+            <!-- Dark Mode Switch -->
+            <div class="dark-toggle-wrapper">
+                <input type="checkbox" id="darkToggle" class="dark-toggle-checkbox" />
+                <label for="darkToggle" class="dark-toggle-label">
+                    <span class="toggle-thumb"></span>
+                </label>
+            </div>
+        </div>
+    </header>
     <!-- Hero Section -->
     <section class="hero">
         <div class="slide left">
@@ -41,7 +105,7 @@
     </section>
 
     <!-- Divider Line -->
-    <hr class="section-divider" />
+    <!-- <hr class="section-divider" /> -->
 
     <!-- Products Section -->
     <section id="products" class="products-section">
@@ -73,7 +137,7 @@
                     <span class="star">☆</span>
                     {% endif %}
                     {% endfor %}
-                    <span class="review-count">({{ product.reviews|default:"0" }} Reviews)</span>
+                    <span class="review-count">({{ product.reviews|default:"0" }} Ratings)</span>
                 </div>
             </div>
             {% empty %}
@@ -186,6 +250,85 @@
                 showPopupMessage(text, type);
             });
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hamburger menu toggle
+            const hamburger = document.getElementById('hamburger');
+            const navMenu = document.getElementById('nav-menu');
+
+            hamburger.addEventListener('click', function () {
+                navMenu.classList.toggle('show');
+            });
+
+            // Desktop dropdown toggle (existing)
+            const dropdownBtn = document.getElementById('accountDropdownBtn');
+            const dropdownMenu = document.getElementById('accountDropdownMenu');
+
+            if (dropdownBtn && dropdownMenu) {
+                dropdownBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!dropdownMenu.contains(e.target) && !dropdownBtn.contains(e.target)) {
+                        dropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+
+            // Mobile dropdown toggle inside hamburger
+            const mobileDropdownBtn = document.getElementById('mobileAccountDropdownBtn');
+            const mobileDropdownMenu = document.getElementById('mobileAccountDropdownMenu');
+
+            if (mobileDropdownBtn && mobileDropdownMenu) {
+                mobileDropdownBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    mobileDropdownMenu.classList.toggle('show');
+                });
+
+                document.addEventListener('click', function (e) {
+                    if (!mobileDropdownMenu.contains(e.target) && !mobileDropdownBtn.contains(e.target)) {
+                        mobileDropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+        });
+
+
+        // const darkToggle = document.getElementById('darkToggle');
+
+        // if (localStorage.getItem('darkMode') === 'true') {
+        //     document.body.classList.add('dark-mode');
+        //     darkToggle.checked = true;
+        // }
+
+        // darkToggle.addEventListener('change', function () {
+        //     document.body.classList.toggle('dark-mode');
+        //     localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        // });
+        const darkToggle = document.getElementById('darkToggle');
+
+        // Load dark mode from localStorage
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.remove('light');
+            document.body.classList.add('dark');
+            darkToggle.checked = true;
+        }
+
+        darkToggle.addEventListener('change', function () {
+            if (darkToggle.checked) {
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+                localStorage.setItem('darkMode', true);
+            } else {
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+                localStorage.setItem('darkMode', false);
+            }
+        });
+
+
+
     </script>
 
 

@@ -1,5 +1,570 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
+.dark-toggle-wrapper {
+    margin-left: 12px;
+}
+
+.dark-toggle-checkbox {
+    display: none;
+}
+
+.dark-toggle-label {
+    cursor: pointer;
+    width: 60px;
+    height: 28px;
+    background: linear-gradient(145deg, #fab37d, #e09461);
+    border-radius: 50px;
+    position: relative;
+    display: block;
+    transition: background 0.4s;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.15);
+}
+
+.toggle-thumb {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: radial-gradient(circle at 30% 30%, #fff, #f5e4dc);
+    border-radius: 50%;
+    transition: all 0.4s ease;
+    box-shadow: inset -2px -2px 4px #fff, inset 2px 2px 4px #d6b49b;
+}
+
+.dark-toggle-label::after {
+    content: "🌙";
+    font-size: 12px;
+    position: absolute;
+    right: 10px;
+    top: 6px;
+    color: #fff8f0;
+    pointer-events: none;
+}
+
+/* Move thumb when toggled */
+.dark-toggle-checkbox:checked+.dark-toggle-label .toggle-thumb {
+    transform: translateX(32px);
+}
+
+/* Darker tone when toggled */
+.dark-toggle-checkbox:checked+.dark-toggle-label {
+    background: linear-gradient(145deg, #b26c3d, #fab37d);
+}
+
+
+/* Dark mode navbar background */
+body.dark header {
+    background-color: #111827;
+    /* Dark blue/gray */
+}
+
+/* Nav link text white */
+body.dark .nav-link,
+body.dark .login-btn,
+body.dark .dropbtn {
+    color: white;
+}
+
+body.dark .nav-menu {
+    background-color: #111827;
+    /* same as dark header */
+}
+
+body.dark .nav-menu .nav-link {
+    color: white;
+}
+
+/* Nav link hover effect (optional) */
+body.dark .nav-link:hover,
+body.dark .login-btn:hover,
+body.dark .dropbtn:hover {
+    color: #d1d5db;
+    /* Tailwind gray-300 */
+}
+
+/* Active link style */
+body.dark .nav-link.active {
+    font-weight: bold;
+    /* text-decoration: underline; */
+    color: white;
+}
+
+/* Icons (wishlist, cart) */
+body.dark .nav-icon-img {
+    filter: brightness(0) invert(1);
+    /* turn icons white */
+}
+
+/* Mobile nav icons */
+body.dark .icon-link img {
+    filter: brightness(0) invert(1);
+}
+
+/* Dropdown background and text */
+body.dark .dropdown-content {
+    background-color: #1f2937;
+    /* dark dropdown bg */
+    color: white;
+}
+
+body.dark .dropdown-content a {
+    color: white;
+}
+
+body.dark .dropdown-content a:hover {
+    background-color: #374151;
+    /* dark hover */
+}
+
+
+
+/* === Hero Section === */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+}
+
+body.dark .hero {
+    background-color: #111827;
+}
+
+.slide {
+    position: relative;
+    width: 50%;
+    overflow: hidden;
+}
+
+.image-wrapper {
+    position: relative;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+}
+
+
+.overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0);
+    /* Default transparent */
+    transition: background 0.3s ease;
+    z-index: 1;
+}
+
+body.dark .overlay {
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark overlay */
+}
+
+.hero-text {
+    position: absolute;
+    z-index: 2;
+    color: #222;
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+body.dark .hero-text {
+    color: rgb(11, 11, 11);
+}
+
+/* Base navbar styling */
+header {
+    background-color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: background-color 0.3s ease, border-bottom 0.3s ease;
+    border-bottom: 1px solid #e5e7eb;
+    /* light gray border in light mode */
+    z-index: 10;
+    position: relative;
+}
+
+/* Dark mode navbar bottom border white */
+body.dark header {
+    background-color: #111827;
+    border-bottom: 0.5px solid rgb(219, 215, 215);
+}
+
+
+.shop-btn {
+    margin: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #111827;
+    color: rgb(0, 0, 0);
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 6px;
+    z-index: 2;
+    position: relative;
+    transition: background 0.3s ease;
+}
+
+body.dark .shop-btn {
+    background-color: rgb(0, 0, 0);
+    color: #f9fafd;
+}
+
+.shop-btn:hover {
+    opacity: 0.9;
+    background-color: #FAB037;
+
+
+}
+
+/* Dim the hero images in dark mode using a pseudo-overlay */
+body.dark .slide::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.25);
+    /* Dimming overlay */
+    z-index: 1;
+}
+
+/* Ensure the image stays behind the overlay */
+.slide img {
+    position: relative;
+    z-index: 0;
+}
+
+/* Ensure hero text and buttons are above the overlay */
+.hero-text,
+.shop-btn {
+    position: relative;
+    z-index: 2;
+}
+
+
+/* === Products Section === */
+.products-section {
+    padding: 4rem 2rem;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.dark .products-section {
+    background-color: #111827;
+    /* Tailwind's gray-800 */
+    color: #ffffff;
+}
+
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.products-header h2 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.view-all-btn {
+    background-color: #111827;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+body.dark .view-all-btn {
+    background-color: #FAB37D;
+    color: #111827;
+}
+
+.view-all-btn:hover {
+    opacity: 0.9;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.3s ease;
+}
+
+body.dark .product-card {
+    background-color: #374151;
+    /* Tailwind's gray-700 */
+    border: 1px solid #4b5563;
+    /* Tailwind's gray-600 */
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+}
+
+body.dark .product-card img {
+    width: 100%;
+    height: 180px;
+    /* object-fit: cover; */
+    border-radius: 6px;
+    background-color: #eaeaea;
+}
+
+.product-card h4 {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.price {
+    color: #111827;
+    font-weight: bold;
+    margin: 0.5rem 0;
+}
+
+body.dark .price {
+    color: #fbbf24;
+    /* amber-400 for contrast */
+}
+
+.rating {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.star {
+    color: #d1d5db;
+    /* gray-300 */
+    margin: 0 1px;
+}
+
+.star.full {
+    color: #f59e0b;
+    /* amber-500 */
+}
+
+.review-count {
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    color: #6b7280;
+    /* gray-500 */
+}
+
+body.dark .review-count {
+    color: #d1d5db;
+}
+
+/* Make product text white in dark mode */
+body.dark .product-card h4,
+body.dark .product-card .price {
+    color: white;
+}
+
+/* Keep review count slightly dimmer */
+body.dark .product-card .review-count {
+    color: #d1d5db;
+    /* Light gray */
+}
+
+/* Keep star rating colors as-is */
+.star {
+    color: #d1d5db;
+    /* Light gray for empty */
+}
+
+.star.full {
+    color: #f59e0b;
+    /* Amber for filled */
+}
+
+body.dark #about {
+    background-color: #111827;
+}
+
+
+
+
+
+/* About Us text white in dark mode */
+/* Dark mode styles for About Us section */
+/* Dark mode for about container */
+body.dark .about-container {
+    background-color: #111827;
+    color: white;
+}
+
+/* Ensure individual text elements inside are white */
+body.dark .about-container h2,
+body.dark .about-container h3,
+body.dark .about-container p {
+    color: white;
+}
+
+/* Optional: image dimming for better contrast */
+body.dark .about-container img {
+    filter: brightness(0.85);
+}
+
+body.dark #contact .contact-wrapper,
+body.dark #contact .contact-info,
+body.dark #contact .contact-form {
+    background-color: #111827;
+    /* same dark background */
+}
+
+/* Ensure the text inside them is white */
+body.dark #contact .contact-info,
+body.dark #contact .contact-form {
+    color: white;
+}
+
+/* Make inputs and textarea dark as before */
+body.dark #contact input,
+body.dark #contact textarea {
+    background-color: #1f2937;
+    color: white;
+    border: 1px solid #374151;
+}
+
+/* Placeholder text */
+body.dark #contact input::placeholder,
+body.dark #contact textarea::placeholder {
+    color: white;
+}
+
+/* Button styling */
+body.dark #contact button {
+    background-color: #FAB37D;
+    color: rgb(3, 2, 2);
+    border: none;
+}
+
+
+body.dark #contact .info-block p {
+    color: white;
+
+}
+
+body.dark #contact {
+    background-color: #111827;
+}
+
+body.dark #about,
+body.dark #contact,
+
+body.dark #products {
+    color: white;
+}
+
+/* Dark mode footer styling */
+body.dark .footer-container {
+    background-color: #111827;
+    /* Dark background */
+    color: white;
+    /* White text */
+    border-top: 1px solid #333;
+}
+
+body.dark .footer-container h4,
+body.dark .footer-container p,
+body.dark .footer-container a {
+    color: white;
+}
+
+body.dark .footer-container a:hover {
+    text-decoration: underline;
+}
+
+body.dark .footer-container input,
+body.dark .footer-container button {
+    background-color: #374151;
+    /* Dark input/button background */
+    color: white;
+    border: 1px solid #374151;
+}
+
+body.dark .footer-container input::placeholder {
+    color: #9ca3af;
+    /* lighter placeholder text */
+}
+
+body.dark .footer-container button:hover {
+    background-color: #374151;
+    cursor: pointer;
+}
+
+body.dark .footer-main .footer-col {
+    border-color: #374151;
+    /* subtle borders if any */
+}
+
+body.dark .footer-bottom {
+    background-color: #0f172a;
+    color: #9ca3af;
+}
+
+body.dark {
+    font-family: 'Poppins', sans-serif;
+    background-color: #111827;
+    /* Dark background */
+    color: #f3f4f6;
+    /* Light text color */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 * {
     margin: 0;
     padding: 0;

@@ -17,6 +17,7 @@ from django.conf import settings
 from .models import Payment  # Make sure you have this model
 from django.views.decorators.csrf import csrf_exempt
 
+from django.db.models import Q
 
 def home_view(request):
     products = Product.objects.all()[:4]  # Fetch only top 4 for homepage
@@ -409,3 +410,75 @@ def save_payment_details(request):
         return JsonResponse({'status': 'success'})
 
     return JsonResponse({'status': 'failed'}, status=400)
+
+def search_view(request):
+    search_query = request.GET.get('q', '').strip()
+    category_name = request.GET.get('type', '').strip()
+
+    categories = Category.objects.all().order_by('name')
+    products = Product.objects.all()
+
+    if category_name and category_name.lower() != "all":
+        products = products.filter(category__name__iexact=category_name)
+
+    if search_query:
+        products = products.filter(
+            Q(name__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+
+    for product in products:
+        try:
+            product.color_options = json.loads(product.color_options or "[]")
+        except:
+            product.color_options = []
+
+    return render(request, 'search.html', {
+        'products': products,
+        'categories': categories,
+        'search_query': search_query,
+        'selected_category': category_name,
+    })
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from .models import Product, ProductReview
+import json
+
+@csrf_exempt
+def submit_review(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        rating = data.get('rating')
+        product_id = data.get('product_id')
+
+        if not request.user.is_authenticated:
+            return JsonResponse({'status': 'error', 'message': 'User not authenticated'})
+
+        try:
+            product = Product.objects.get(id=product_id)
+            # Prevent duplicate review per user-product
+            existing_review = ProductReview.objects.filter(user=request.user, product=product).first()
+            if existing_review:
+                existing_review.rating = rating
+                existing_review.save()
+            else:
+                ProductReview.objects.create(
+                    user=request.user,
+                    product=product,
+                    rating=rating
+                )
+
+            # Optionally, update product rating average
+            all_reviews = ProductReview.objects.filter(product=product)
+            avg_rating = sum(r.rating for r in all_reviews) / all_reviews.count()
+            product.rating = round(avg_rating, 1)
+            product.reviews = all_reviews.count()
+            product.save()
+
+            return JsonResponse({'status': 'success'})
+
+        except Product.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Product not found'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'})

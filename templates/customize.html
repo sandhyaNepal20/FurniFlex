@@ -9,6 +9,8 @@
     <title>{{ product.name }} - Customize | FurniFlex</title>
 
     <link rel="stylesheet" href="{% static 'css/customize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/home.css' %}" />
+
     <script defer src="{% static 'script.js' %}"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
@@ -401,7 +403,7 @@
                     <span aria-hidden="true">☆</span>
                     {% endif %}
                     {% endfor %}
-                    <span class="reviews">({{ product.reviews|default:"0" }} Reviews)</span>
+                    <span class="reviews">({{ product.reviews|default:"0" }} Ratings)</span>
                 </div>
                 <div class="price">Rs {{ product.price }}</div>
 

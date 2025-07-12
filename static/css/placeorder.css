@@ -876,3 +876,85 @@ hr {
     color: #bbb;
     font-size: 16px;
 }
+
+/* Modal background with blur */
+.review-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Modal content */
+.review-modal-content {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    font-family: 'Poppins', sans-serif;
+    animation: fadeIn 0.3s ease;
+}
+
+.review-modal-content h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #111;
+}
+
+/* Stars */
+.stars .star {
+    font-size: 28px;
+    color: gray;
+    cursor: pointer;
+    margin: 0 4px;
+    transition: color 0.3s ease;
+}
+
+.stars .star.selected {
+    color: gold;
+}
+
+/* Submit button */
+.submit-review-btn {
+    margin-top: 20px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.submit-review-btn:hover {
+    background-color: #FAB37D;
+}
+
+.thank-you-text {
+    margin-top: 15px;
+    color: #080808;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
