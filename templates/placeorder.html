@@ -8,12 +8,61 @@
     <title>Place Order - FurniFlex</title>
 
     <link rel="stylesheet" href="{% static 'css/placeorder.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/customize.css' %}" />
+    <!-- <link rel="stylesheet" href="{% static 'css/customize.css' %}" /> -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <script src="https://khalti.com/static/khalti-checkout.js"></script>
+    <style>
+        .message-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        .message-popup.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .message-popup.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message-popup.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b0b7;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            float: right;
+            font-size: 18px;
+            cursor: pointer;
+            color: inherit;
+            margin-left: 10px;
+            padding: 0;
+            line-height: 1;
+        }
+    </style>
+
 
     <!-- Khalti Checkout JS -->
-    <script src="https://khalti.com/static/khalti-checkout.js"></script>
 </head>
 
 <body>
@@ -151,7 +200,7 @@
             <h3>More Payment Options</h3>
 
             <div class="payment-options-box">
-                <div class="option" id="khalti-option">
+                <div class="option" id="khalti-option" onclick="triggerKhalti()">
                     <img src="{% static 'images/khalti.png' %}" alt="Khalti Wallet" />
                     <span>Khalti</span>
                     <span class="arrow">&#x276F;</span>
@@ -176,7 +225,6 @@
     <!-- COD Confirmation Modal -->
     <div id="codModal" class="cod-modal" style="display:none;">
         <div class="cod-modal-content">
-            <span class="cod-icon">😒</span>
             <h3>Are you sure you want to confirm your order?</h3>
             <p class="cod-note">.</p>
             <div class="cod-buttons">
@@ -225,6 +273,7 @@
         const addressModal = document.getElementById('addressModal');
         const codModal = document.getElementById('codModal');
         const successModal = document.getElementById('successModal');
+        const reviewPopup = document.getElementById('reviewPopup');
 
         document.querySelector('.place-order-btn').addEventListener('click', () => {
             paymentModal.style.display = 'flex';
@@ -241,7 +290,12 @@
         function closeAddressModal() {
             addressModal.style.display = 'none';
         }
-
+        function isAddressFilled() {
+            return document.getElementById('displayFullName').textContent &&
+                document.getElementById('displayPhone').textContent &&
+                document.getElementById('displayCity').textContent &&
+                document.getElementById('displayAddress').textContent;
+        }
         function saveAddress() {
             const fullName = document.getElementById('fullName').value;
             const phoneNumber = document.getElementById('phoneNumber').value;
@@ -249,7 +303,7 @@
             const address = document.getElementById('address').value;
 
             if (!fullName || !phoneNumber || !city || !address) {
-                alert("Please fill all address fields.");
+                showPopupMessage("Please fill all address fields.", "error");
                 return;
             }
 
@@ -268,10 +322,45 @@
         }
 
         function confirmCOD() {
-            codModal.style.display = 'none';
-            paymentModal.style.display = 'none';
-            successModal.style.display = 'flex';
+            if (!isAddressFilled()) {
+                popup("Please fill in your address before placing the order.");
+                return;
+            }
+
+            const city = document.getElementById("displayCity").innerText.replace("City: ", "");
+            const address = document.getElementById("displayAddress").innerText.replace("Address: ", "");
+            const fullAddress = `${address}, ${city}`;
+
+            fetch("/send-cod-email/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    product_name: "{{ product.name }}",
+                    product_price: "{{ product.price }}",
+                    quantity: "{{ quantity }}",
+                    total: "{{ total_price }}",
+                    address: fullAddress
+                })
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        codModal.style.display = "none";
+                        paymentModal.style.display = "none";
+                        successModal.style.display = "flex";
+
+                        setTimeout(() => {
+                            successModal.style.display = "none";
+                            showReviewPopup();
+                        }, 2000);
+                    } else {
+                        popup("Failed to send confirmation email.");
+                    }
+                });
         }
+
 
         function closeSuccessModal() {
             successModal.style.display = 'none';
@@ -283,97 +372,23 @@
             else if (event.target === addressModal) closeAddressModal();
             else if (event.target === codModal) closeCODModal();
             else if (event.target === successModal) closeSuccessModal();
+            else if (event.target === document.getElementById('reviewPopup')) {
+                document.getElementById('reviewPopup').style.display = 'none';
+            }
         };
+
 
         // COD click opens COD modal
         document.getElementById('cod-option').addEventListener('click', () => {
+            if (!isAddressFilled()) {
+                showPopupMessage("Please fill in your address before placing the order.", "error");
+                return;
+            }
             codModal.style.display = 'flex';
         });
 
-        // Khalti config
-        var khaltiConfig = {
-            publicKey: "test_public_key_XXXXXXXXXXXXXXXXXXXX", // Replace with your actual Khalti key
-            productIdentity: "{{ product.id }}",
-            productName: "{{ product.name|escapejs }}",
-            productUrl: window.location.href,
-            eventHandler: {
-                onSuccess(payload) {
-                    console.log('Khalti Payment Success:', payload);
 
-                    // Get address input fields
-                    const fullName = document.getElementById('fullName').value;
-                    const phoneNumber = document.getElementById('phoneNumber').value;
-                    const city = document.getElementById('city').value;
-                    const address = document.getElementById('address').value;
 
-                    if (!fullName || !phoneNumber || !city || !address) {
-                        alert("Please enter address before paying.");
-                        return;
-                    }
-
-                    // Send data to backend
-                    fetch('/save-payment/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRFToken': getCookie('csrftoken')
-                        },
-                        body: JSON.stringify({
-                            token: payload.token,
-                            amount: payload.amount,
-                            full_name: fullName,
-                            phone: phoneNumber,
-                            city: city,
-                            address: address,
-                            product_id: "{{ product.id }}"
-                        })
-                    }).then(res => res.json())
-                        .then(data => {
-                            if (data.status === 'success') {
-                                paymentModal.style.display = 'none';
-                                successModal.style.display = 'flex';
-                            } else {
-                                alert('Could not save payment info.');
-                            }
-                        }).catch(err => {
-                            alert('Error saving payment info.');
-                            console.error(err);
-                        });
-                },
-                onError(error) {
-                    console.log('Khalti Payment Failed:', error);
-                    alert('Payment Failed! ' + error.message);
-                },
-                onClose() {
-                    console.log('Khalti widget closed');
-                }
-            },
-            paymentPreference: ["KHALTI", "EBANKING", "MOBILE_BANKING", "CONNECT_IPS", "SCT"]
-        };
-
-        var checkout = new KhaltiCheckout(khaltiConfig);
-
-        // Open Khalti checkout
-        document.getElementById('khalti-option').addEventListener('click', () => {
-            let amountPaisa = Math.round(parseFloat('{{ total_price }}') * 100);
-            checkout.show({ amount: amountPaisa });
-        });
-
-        // CSRF Token for Django
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
         function showReviewSection() {
             document.getElementById('thanksButton').style.display = 'none';
             document.getElementById('reviewSection').style.display = 'block';
@@ -496,9 +511,146 @@
                 });
         }
 
+        const khaltiOption = document.getElementById('khalti-option');
+
+        khaltiOption.addEventListener('click', function () {
+            // Replace with your live public key
+            let config = {
+                publicKey: "live_public_key_6e3b4935cc2442b19edd0f6e8791630b",  // Replace this
+                productIdentity: "{{ product.id }}",
+                productName: "{{ product.name }}",
+                productUrl: window.location.href,
+                eventHandler: {
+                    onSuccess(payload) {
+                        console.log(payload);
+                        alert("Payment successful!");
+
+                        // Send payment token to backend
+                        fetch("/save-payment-details/", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": getCookie("csrftoken")
+                            },
+                            body: JSON.stringify({
+                                token: payload.token,
+                                amount: amount,
+                                product_id: "{{ product.id }}",
+                                full_name: document.getElementById("displayFullName").innerText.replace("Name: ", ""),
+                                phone: document.getElementById("displayPhone").innerText.replace("Phone: ", ""),
+                                city: document.getElementById("displayCity").innerText.replace("City: ", ""),
+                                address: document.getElementById("displayAddress").innerText.replace("Address: ", "")
+                            })
+                        }).then(res => res.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    successModal.style.display = 'flex';
+                                    setTimeout(() => {
+                                        successModal.style.display = 'none';
+                                        showReviewPopup();
+                                    }, 2000);
+                                } else {
+                                    alert("Failed to save payment.");
+                                }
+                            });
+                    },
+                    onError(error) {
+                        console.log(error);
+                        alert("Payment failed!");
+                    },
+                    onClose() {
+                        console.log("Khalti widget is closing");
+                    }
+                }
+            };
+
+            let amount = parseInt("{{ total_price }}") * 100;
+
+            let checkout = new KhaltiCheckout(config);
+            checkout.show({ amount: amount });
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function confirmCOD() {
+            const city = document.getElementById("displayCity").innerText.replace("City: ", "");
+            const address = document.getElementById("displayAddress").innerText.replace("Address: ", "");
+            const fullAddress = `${address}, ${city}`;
+
+            fetch("/send-cod-email/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    product_name: "{{ product.name }}",
+                    product_price: "{{ product.price }}",
+                    quantity: "{{ quantity }}",
+                    total: "{{ total_price }}",
+                    address: fullAddress
+                })
+            }).then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        codModal.style.display = "none";
+                        paymentModal.style.display = "none";
+                        successModal.style.display = "flex";
+
+                        setTimeout(() => {
+                            successModal.style.display = "none";
+                            showReviewPopup();
+                        }, 2000);
+                    } else {
+                        alert("Failed to send confirmation email.");
+                    }
+                });
+        }
 
 
     </script>
+    <script>
+        function showPopupMessage(message, type, callback = null) {
+            const existingPopup = document.querySelector('.message-popup');
+            if (existingPopup) existingPopup.remove();
+
+            const popup = document.createElement('div');
+            popup.className = `message-popup ${type}`;
+            popup.innerHTML = `
+            ${message}
+            <button class="popup-close" onclick="closePopup(this)">&times;</button>
+        `;
+
+            document.body.appendChild(popup);
+            setTimeout(() => popup.classList.add('show'), 100);
+
+            setTimeout(() => {
+                closePopup(popup.querySelector('.popup-close'));
+                if (callback) callback();
+            }, 2500);
+        }
+
+        function closePopup(closeBtn) {
+            const popup = closeBtn.parentElement;
+            popup.classList.remove('show');
+            setTimeout(() => popup.remove(), 300);
+        }
+    </script>
+
+
 
 </body>
 

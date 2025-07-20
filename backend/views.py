@@ -278,7 +278,11 @@ def customize_product_view(request, product_id):
 
 
 def cart_view(request):
-    return render(request, 'cart.html')
+    if request.user.is_authenticated:
+        return render(request, 'cart.html')  # Authenticated users see their cart
+    else:
+        return render(request, 'beforecart.html')  # Guests see login prompt
+
 def placeorder_view(request):
     product_id = request.GET.get('product_id')
     quantity = int(request.GET.get('quantity', 1))
@@ -482,3 +486,97 @@ def submit_review(request):
             return JsonResponse({'status': 'error', 'message': 'Product not found'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request'})
+
+
+import random
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
+@csrf_exempt
+def initiate_khalti_payment(request):
+    if request.method == 'POST':
+        amount = int(request.POST.get('amount')) * 100  # Khalti expects amount in paisa
+        order_id = request.POST.get('order_id', 'ORD_' + str(random.randint(1000, 9999)))
+
+        payload = {
+            "return_url": request.build_absolute_uri('/payment-success/'),
+            "website_url": "http://127.0.0.1:8000/",  # or your actual domain
+            "amount": amount,
+            "purchase_order_id": order_id,
+            "purchase_order_name": "FurniFlex Order"
+        }
+
+        headers = {
+            "Authorization": f"Key {settings.KHALTI_SECRET_KEY}"
+        }
+
+        response = requests.post("https://a.khalti.com/api/v2/epayment/initiate/", json=payload, headers=headers)
+
+        if response.status_code == 200:
+            return JsonResponse(response.json())
+        else:
+            return JsonResponse({'error': 'Failed to initiate payment'}, status=400)
+def verify_khalti_payment(pidx):
+    url = "https://khalti.com/api/v2/payment/verify/"
+    headers = {
+        "Authorization": f"Key {settings.KHALTI_SECRET_KEY}"
+    }
+    data = {
+        "pidx": pidx
+    }
+
+    response = requests.post(url, headers=headers, data=data)
+    return response.json()
+
+def payment_success_view(request):
+    return render(request, 'payment_success.html')
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
+@csrf_exempt
+@login_required
+def send_cod_email(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+
+        user = request.user
+        email = user.email
+        full_name = user.first_name
+
+        product_name = data.get("product_name")
+        product_price = data.get("product_price")
+        quantity = data.get("quantity")
+        total = data.get("total")
+        address = data.get("address")
+
+        subject = 'Your FurniFlex Order is Confirmed (Cash on Delivery)'
+        message = f"""
+Hello {full_name},
+
+Your order has been confirmed. 🎉
+
+Order Details:
+------------------
+Product: {product_name}
+Quantity: {quantity}
+Price per item: Rs. {product_price}
+Total: Rs. {total}
+
+Shipping Address:
+{address}
+
+We will deliver your order soon. Thank you for shopping with FurniFlex!
+
+Best,
+FurniFlex Team
+"""
+
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email])
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'failed', 'message': 'Invalid request'})
+

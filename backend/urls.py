@@ -33,6 +33,12 @@ urlpatterns = [
                                                                 path('save-payment/', views.save_payment_details, name='save_payment'),
     path('searchview/', views.search_view, name='search'),
     path('submit-review/', views.submit_review, name='submit_review'),
+    path('khalti/initiate/', views.initiate_khalti_payment, name='khalti_initiate'),
+
+ path('initiate-khalti/',views. initiate_khalti_payment, name='initiate_khalti'),
+    path('save-payment-details/', views.save_payment_details, name='save_payment'),
+    path('payment-success/', views.payment_success_view, name='payment_success'),
+        path('send-cod-email/', views.send_cod_email, name='send_cod_email'),
 
 
 

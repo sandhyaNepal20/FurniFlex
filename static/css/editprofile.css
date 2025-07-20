@@ -61,16 +61,23 @@ input:focus {
 .save-button {
     align-self: flex-start;
     padding: 10px 20px;
-    background-color: #d89453;
+    background-color: #FAB37D;
     color: #000;
     font-weight: 500;
-    border: none;
     border-radius: 6px;
     cursor: pointer;
+    border: 1px solid #000;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .save-button:hover {
-    background-color: #c07a39;
+    background-color: #d87f35;
+    color: #000;
+    transform: scale(1.1);
 }
 
 .success-popup {

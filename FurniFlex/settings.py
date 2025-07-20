@@ -140,3 +140,4 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sandhyanepal54@gmail.com'             # ✅ Your Gmail address
 EMAIL_HOST_PASSWORD = 'icff xczc pgdt dxjh'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+KHALTI_SECRET_KEY = 'live_secret_key_1748c90432c24c689abb28dda2164df9'

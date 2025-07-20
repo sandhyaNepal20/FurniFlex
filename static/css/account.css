@@ -76,17 +76,23 @@
 
 .edit-button {
     align-self: flex-end;
-    background-color: #e2a874;
+    background-color: #FAB37D;
     color: #000;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    font-size: 14px;
     font-weight: 500;
+    border-radius: 6px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+
 }
 
 .edit-button:hover {
-    background-color: #d28e64;
+    background-color: #d87f35;
+    color: #000;
+    transform: scale(1.1);
 }
 
 .form-details {
@@ -122,8 +128,7 @@ input[readonly] {
     padding-top: 5px;
 }
 
-.edit-button {
-    background-color: #e2a874;
+/* .edit-button {
     color: #000;
     border: none;
     padding: 8px 16px;
@@ -132,8 +137,4 @@ input[readonly] {
     text-decoration: none;
     cursor: pointer;
     display: inline-block;
-}
-
-.edit-button:hover {
-    background-color: #d28e64;
-}
+} */

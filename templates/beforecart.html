@@ -11,6 +11,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <style>
+    .beforecart-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #f7f7f7;
+        border: 1px solid #e0e0e0;
+        border-radius: 12px;
+        text-align: center;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .beforecart-container h2 {
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .beforecart-container p {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .beforecart-container a {
+        color: #FAB37D;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 4px;
+    }
+
+    .beforecart-container a:hover {
+        text-decoration: underline;
+    }
+
+
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #fff;
@@ -61,38 +97,13 @@
         <div class="cart-divider"></div>
         <p class="empty-message">You do not have any products on your shopping list.</p>
     </div>
-    <div class="signup-container">
-        <div class="form-box">
-            <div class="form-logo">
-                <img src="{% static 'images/logofurni.png' %}" alt="FurniFlex Logo" />
-            </div>
-            <h2>Login</h2>
 
-            <!-- Show messages -->
-            {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                <p class="message {{ message.tags }}">{{ message }}</p>
-                {% endfor %}
-            </div>
-            {% endif %}
 
-            <p class="form-subtitle">Welcome back! Please login to your account.</p>
-
-            <form method="POST">
-                {% csrf_token %}
-                <input type="email" placeholder="Email" name="email" required />
-                <input type="password" placeholder="Password" name="password" required />
-
-                <div class="form-actions">
-                    <button type="submit">Log In</button>
-                    <a href="{% url 'password_reset' %}" class="forgot-password">Forgot Password?</a>
-                </div>
-            </form>
-
-            <p class="login-link">Don’t have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
-        </div>
+    {% block content %}
+    <div class="beforecart-container">
+        <p>You need to <a href="{% url 'login' %}">log in</a> to view your cart.</p>
     </div>
+    {% endblock %}
 
     {% include 'footer.html' %}
 </body>
